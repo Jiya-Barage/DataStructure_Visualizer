@@ -1,28 +1,28 @@
-#include "../include/structures/Stack.h"
+#include "../include/structures/Queue.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    Stack stack;
+    Queue queue;
 
-    cout << "=== DSA Toolkit - Stack Test ===\n\n";
+    cout << "=== DSA Toolkit - Queue Test ===\n\n";
 
-    stack.push(10);
-    stack.push(20);
-    stack.push(30);
+    queue.enqueue(10);
+    queue.enqueue(20);
+    queue.enqueue(30);
 
-    cout << "After pushing 10, 20, 30:\n";
-    stack.display();
+    cout << "After enqueueing 10, 20, 30:\n";
+    queue.display();
 
-    cout << "\nTop element: " << stack.peek() << endl;
+    cout << "\nFront element: " << queue.peek() << endl;
 
-    stack.pop();
+    queue.dequeue();
 
-    cout << "\nAfter popping:\n";
-    stack.display();
+    cout << "\nAfter dequeue:\n";
+    queue.display();
 
-    cout << "\nTop element: " << stack.peek() << endl;
+    cout << "\nFront element: " << queue.peek() << endl;
 
     return 0;
 }
