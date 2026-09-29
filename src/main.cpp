@@ -1,18 +1,20 @@
-#include "../include/structures/BinaryTree.h"
+#include "../include/structures/BST.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    BinaryTree tree;
+    BST tree;
 
-    cout << "=== DSA Toolkit - Binary Tree Test ===\n\n";
+    cout << "=== DSA Toolkit - BST Test ===\n\n";
 
-    tree.insert(10);
-    tree.insert(5);
+    tree.insert(50);
+    tree.insert(30);
+    tree.insert(70);
     tree.insert(20);
-    tree.insert(3);
-    tree.insert(7);
+    tree.insert(40);
+    tree.insert(60);
+    tree.insert(80);
 
     cout << "Tree traversals:\n";
 
@@ -20,19 +22,19 @@ int main()
     tree.preorder();
     tree.postorder();
 
-    cout << "\nSearching for 7:\n";
+    cout << "\nSearching for 60:\n";
 
-    if (tree.search(7))
-        cout << "7 found in the tree.\n";
+    if (tree.search(60))
+        cout << "60 found in BST.\n";
     else
-        cout << "7 not found in the tree.\n";
+        cout << "60 not found in BST.\n";
 
-    cout << "\nSearching for 50:\n";
+    cout << "\nSearching for 90:\n";
 
-    if (tree.search(50))
-        cout << "50 found in the tree.\n";
+    if (tree.search(90))
+        cout << "90 found in BST.\n";
     else
-        cout << "50 not found in the tree.\n";
+        cout << "90 not found in BST.\n";
 
     return 0;
 }
