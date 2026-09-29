@@ -1,40 +1,57 @@
-#include "../include/structures/AVL.h"
+#include "../include/algorithms/Sorting.h"
 #include <iostream>
 using namespace std;
 
+void displayArray(int arr[], int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        cout << arr[i] << " ";
+    }
+
+    cout << endl;
+}
+
 int main()
 {
-    AVL tree;
+    cout << "=== DSA Toolkit - Sorting Test ===\n\n";
 
-    cout << "=== DSA Toolkit - AVL Tree Test ===\n\n";
+    int original[] = {64, 25, 12, 22, 11};
+    int size = 5;
 
-    tree.insert(30);
-    tree.insert(20);
-    tree.insert(10);
+    int arr1[5] = {64, 25, 12, 22, 11};
+    int arr2[5] = {64, 25, 12, 22, 11};
+    int arr3[5] = {64, 25, 12, 22, 11};
+    int arr4[5] = {64, 25, 12, 22, 11};
+    int arr5[5] = {64, 25, 12, 22, 11};
+    int arr6[5] = {64, 25, 12, 22, 11};
 
-    tree.insert(40);
-    tree.insert(50);
+    cout << "Original Array: ";
+    displayArray(original, size);
 
-    tree.insert(25);
+    Sorting::bubbleSort(arr1, size);
+    cout << "Bubble Sort:    ";
+    displayArray(arr1, size);
 
-    cout << "AVL Tree traversals:\n";
+    Sorting::selectionSort(arr2, size);
+    cout << "Selection Sort: ";
+    displayArray(arr2, size);
 
-    tree.inorder();
-    tree.preorder();
+    Sorting::insertionSort(arr3, size);
+    cout << "Insertion Sort: ";
+    displayArray(arr3, size);
 
-    cout << "\nSearching for 25:\n";
+    Sorting::mergeSort(arr4, 0, size - 1);
+    cout << "Merge Sort:     ";
+    displayArray(arr4, size);
 
-    if (tree.search(25))
-        cout << "25 found in AVL tree.\n";
-    else
-        cout << "25 not found.\n";
+    Sorting::quickSort(arr5, 0, size - 1);
+    cout << "Quick Sort:     ";
+    displayArray(arr5, size);
 
-    cout << "\nSearching for 100:\n";
-
-    if (tree.search(100))
-        cout << "100 found in AVL tree.\n";
-    else
-        cout << "100 not found.\n";
+    Sorting::heapSort(arr6, size);
+    cout << "Heap Sort:      ";
+    displayArray(arr6, size);
 
     return 0;
 }
