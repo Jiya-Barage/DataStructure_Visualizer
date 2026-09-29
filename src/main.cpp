@@ -1,34 +1,39 @@
-#include "../include/structures/CircularQueue.h"
+#include "../include/structures/Deque.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    CircularQueue queue;
+    Deque deque;
 
-    cout << "=== DSA Toolkit - Circular Queue Test ===\n\n";
+    cout << "=== DSA Toolkit - Deque Test ===\n\n";
 
-    queue.enqueue(10);
-    queue.enqueue(20);
-    queue.enqueue(30);
+    deque.insertRear(20);
+    deque.insertRear(30);
 
-    cout << "After enqueueing 10, 20, 30:\n";
-    queue.display();
+    cout << "After inserting 20 and 30 at rear:\n";
+    deque.display();
 
-    cout << "\nFront element: " << queue.peek() << endl;
+    deque.insertFront(10);
 
-    queue.dequeue();
+    cout << "\nAfter inserting 10 at front:\n";
+    deque.display();
 
-    cout << "\nAfter dequeue:\n";
-    queue.display();
+    cout << "\nFront element: " << deque.getFront() << endl;
+    cout << "Rear element: " << deque.getRear() << endl;
 
-    cout << "\nFront element: " << queue.peek() << endl;
+    deque.deleteFront();
 
-    queue.enqueue(40);
-    queue.enqueue(50);
+    cout << "\nAfter deleting from front:\n";
+    deque.display();
 
-    cout << "\nAfter enqueueing 40 and 50:\n";
-    queue.display();
+    deque.deleteRear();
+
+    cout << "\nAfter deleting from rear:\n";
+    deque.display();
+
+    cout << "\nFront element: " << deque.getFront() << endl;
+    cout << "Rear element: " << deque.getRear() << endl;
 
     return 0;
 }
