@@ -1,38 +1,28 @@
-#include "../include/structures/LinkedList.h"
+#include "../include/structures/Stack.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    LinkedList list;
+    Stack stack;
 
-    cout << "=== DSA Toolkit - Linked List Test ===\n\n";
+    cout << "=== DSA Toolkit - Stack Test ===\n\n";
 
-    list.insertEnd(10);
-    list.insertEnd(20);
-    list.insertEnd(30);
+    stack.push(10);
+    stack.push(20);
+    stack.push(30);
 
-    cout << "After inserting at end:\n";
-    list.display();
+    cout << "After pushing 10, 20, 30:\n";
+    stack.display();
 
-    list.insertBeginning(5);
+    cout << "\nTop element: " << stack.peek() << endl;
 
-    cout << "\nAfter inserting 5 at beginning:\n";
-    list.display();
+    stack.pop();
 
-    int position = list.search(20);
+    cout << "\nAfter popping:\n";
+    stack.display();
 
-    cout << "\nSearching for 20:\n";
-
-    if (position != -1)
-        cout << "20 found at position " << position << endl;
-    else
-        cout << "20 not found.\n";
-
-    list.remove(20);
-
-    cout << "\nAfter deleting 20:\n";
-    list.display();
+    cout << "\nTop element: " << stack.peek() << endl;
 
     return 0;
 }
