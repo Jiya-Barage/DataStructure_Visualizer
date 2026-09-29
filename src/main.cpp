@@ -1,39 +1,38 @@
-#include "../include/structures/Deque.h"
+#include "../include/structures/BinaryTree.h"
 #include <iostream>
 using namespace std;
 
 int main()
 {
-    Deque deque;
+    BinaryTree tree;
 
-    cout << "=== DSA Toolkit - Deque Test ===\n\n";
+    cout << "=== DSA Toolkit - Binary Tree Test ===\n\n";
 
-    deque.insertRear(20);
-    deque.insertRear(30);
+    tree.insert(10);
+    tree.insert(5);
+    tree.insert(20);
+    tree.insert(3);
+    tree.insert(7);
 
-    cout << "After inserting 20 and 30 at rear:\n";
-    deque.display();
+    cout << "Tree traversals:\n";
 
-    deque.insertFront(10);
+    tree.inorder();
+    tree.preorder();
+    tree.postorder();
 
-    cout << "\nAfter inserting 10 at front:\n";
-    deque.display();
+    cout << "\nSearching for 7:\n";
 
-    cout << "\nFront element: " << deque.getFront() << endl;
-    cout << "Rear element: " << deque.getRear() << endl;
+    if (tree.search(7))
+        cout << "7 found in the tree.\n";
+    else
+        cout << "7 not found in the tree.\n";
 
-    deque.deleteFront();
+    cout << "\nSearching for 50:\n";
 
-    cout << "\nAfter deleting from front:\n";
-    deque.display();
-
-    deque.deleteRear();
-
-    cout << "\nAfter deleting from rear:\n";
-    deque.display();
-
-    cout << "\nFront element: " << deque.getFront() << endl;
-    cout << "Rear element: " << deque.getRear() << endl;
+    if (tree.search(50))
+        cout << "50 found in the tree.\n";
+    else
+        cout << "50 not found in the tree.\n";
 
     return 0;
 }
