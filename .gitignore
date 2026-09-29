@@ -1,0 +1,15 @@
+# Compiled C++ files
+*.exe
+*.out
+main
+
+# VS Code settings
+.vscode/
+
+# Build folders
+build/
+bin/
+
+# Temporary files
+*.o
+*.obj
