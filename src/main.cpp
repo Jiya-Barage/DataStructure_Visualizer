@@ -309,16 +309,41 @@ int main()
     cout << "Heap Sort:      ";
     displayArray(heap, size);
 
-cout << "\n========== 12. BUBBLE SORT METRICS ==========\n";
+cout << "\n========== 12. SORTING METRICS ==========\n";
 
-int metricsArray[] = {64, 25, 12, 22, 11};
+int selectionArray[] = {64, 25, 12, 22, 11};
+int insertionArray[] = {64, 25, 12, 22, 11};
 
 Metrics metrics;
 
-Sorting::bubbleSort(metricsArray, 5, &metrics);
+cout << "\n--- Bubble Sort ---\n";
+
+int bubbleMetricsArray[] = {64, 25, 12, 22, 11};
+
+Sorting::bubbleSort(bubbleMetricsArray, 5, &metrics);
 
 cout << "Sorted Array: ";
-displayArray(metricsArray, 5);
+displayArray(bubbleMetricsArray, 5);
+
+metrics.display();
+
+
+cout << "\n--- Selection Sort ---\n";
+
+Sorting::selectionSort(selectionArray, 5, &metrics);
+
+cout << "Sorted Array: ";
+displayArray(selectionArray, 5);
+
+metrics.display();
+
+
+cout << "\n--- Insertion Sort ---\n";
+
+Sorting::insertionSort(insertionArray, 5, &metrics);
+
+cout << "Sorted Array: ";
+displayArray(insertionArray, 5);
 
 metrics.display();
 }

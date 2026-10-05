@@ -7,9 +7,9 @@ class Sorting
 {
 public:
     static void bubbleSort(int arr[], int size, Metrics* metrics = nullptr);
+    static void selectionSort(int arr[], int size, Metrics* metrics = nullptr);
+    static void insertionSort(int arr[], int size, Metrics* metrics = nullptr);
 
-    static void selectionSort(int arr[], int size);
-    static void insertionSort(int arr[], int size);
     static void mergeSort(int arr[], int left, int right);
     static void quickSort(int arr[], int low, int high);
     static void heapSort(int arr[], int size);
