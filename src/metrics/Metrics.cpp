@@ -1,5 +1,6 @@
 #include "../../include/metrics/Metrics.h"
 #include <iostream>
+#include <chrono>
 
 using namespace std;
 
@@ -15,6 +16,7 @@ void Metrics::reset()
     assignments = 0;
     arrayAccesses = 0;
     recursiveCalls = 0;
+    executionTime = 0;
 }
 
 void Metrics::incrementComparisons()
@@ -42,6 +44,20 @@ void Metrics::incrementRecursiveCalls()
     recursiveCalls++;
 }
 
+void Metrics::startTimer()
+{
+    start = chrono::high_resolution_clock::now();
+}
+
+void Metrics::stopTimer()
+{
+    auto end = chrono::high_resolution_clock::now();
+
+    executionTime =
+        chrono::duration_cast<chrono::nanoseconds>
+        (end - start).count();
+}
+
 long long Metrics::getComparisons()
 {
     return comparisons;
@@ -67,6 +83,11 @@ long long Metrics::getRecursiveCalls()
     return recursiveCalls;
 }
 
+long long Metrics::getExecutionTime()
+{
+    return executionTime;
+}
+
 void Metrics::display()
 {
     cout << "------------------------------\n";
@@ -78,6 +99,7 @@ void Metrics::display()
     cout << "Assignments     : " << assignments << endl;
     cout << "Array Accesses  : " << arrayAccesses << endl;
     cout << "Recursive Calls : " << recursiveCalls << endl;
+    cout << "Execution Time  : " << executionTime << " nanoseconds\n";
 
     cout << "------------------------------\n";
 }

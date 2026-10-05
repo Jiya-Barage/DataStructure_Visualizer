@@ -1,6 +1,8 @@
 #ifndef METRICS_H
 #define METRICS_H
 
+#include <chrono>
+
 class Metrics
 {
 private:
@@ -9,6 +11,9 @@ private:
     long long assignments;
     long long arrayAccesses;
     long long recursiveCalls;
+    long long executionTime;
+
+    std::chrono::high_resolution_clock::time_point start;
 
 public:
     Metrics();
@@ -21,11 +26,15 @@ public:
     void incrementArrayAccesses();
     void incrementRecursiveCalls();
 
+    void startTimer();
+    void stopTimer();
+
     long long getComparisons();
     long long getSwaps();
     long long getAssignments();
     long long getArrayAccesses();
     long long getRecursiveCalls();
+    long long getExecutionTime();
 
     void display();
 };

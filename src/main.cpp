@@ -309,46 +309,16 @@ int main()
     cout << "Heap Sort:      ";
     displayArray(heap, size);
 
+cout << "\n========== 12. BUBBLE SORT METRICS ==========\n";
 
-    cout << "\n========== 12. METRICS TEST ==========\n";
+int metricsArray[] = {64, 25, 12, 22, 11};
 
-    Metrics metrics;
+Metrics metrics;
 
+Sorting::bubbleSort(metricsArray, 5, &metrics);
 
-    // Testing comparison counter
-    metrics.incrementComparisons();
-    metrics.incrementComparisons();
+cout << "Sorted Array: ";
+displayArray(metricsArray, 5);
 
-
-    // Testing swap counter
-    metrics.incrementSwaps();
-
-
-    // Testing assignment counter
-    metrics.incrementAssignments();
-    metrics.incrementAssignments();
-    metrics.incrementAssignments();
-
-
-    // Testing array access counter
-    metrics.incrementArrayAccesses();
-    metrics.incrementArrayAccesses();
-    metrics.incrementArrayAccesses();
-    metrics.incrementArrayAccesses();
-
-
-    // Testing recursive call counter
-    metrics.incrementRecursiveCalls();
-
-
-    // Display all metrics
-    metrics.display();
-
-
-    cout << "\n==================================================\n";
-    cout << "             DEMONSTRATION COMPLETE\n";
-    cout << "==================================================\n";
-
-
-    return 0;
+metrics.display();
 }

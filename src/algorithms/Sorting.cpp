@@ -1,18 +1,50 @@
 #include "../../include/algorithms/Sorting.h"
 
-void Sorting::bubbleSort(int arr[], int size)
+void Sorting::bubbleSort(int arr[], int size, Metrics* metrics)
 {
+    if (metrics != nullptr)
+    {
+        metrics->reset();
+        metrics->startTimer();
+    }
+
     for (int i = 0; i < size - 1; i++)
     {
         for (int j = 0; j < size - i - 1; j++)
         {
+            if (metrics != nullptr)
+            {
+                metrics->incrementComparisons();
+                metrics->incrementArrayAccesses();
+                metrics->incrementArrayAccesses();
+            }
+
             if (arr[j] > arr[j + 1])
             {
                 int temp = arr[j];
+
+                if (metrics != nullptr)
+                    metrics->incrementAssignments();
+
                 arr[j] = arr[j + 1];
+
+                if (metrics != nullptr)
+                    metrics->incrementAssignments();
+
                 arr[j + 1] = temp;
+
+                if (metrics != nullptr)
+                {
+                    metrics->incrementAssignments();
+                    metrics->incrementSwaps();
+                }
             }
         }
+    }
+
+    if (metrics != nullptr)
+    {
+        metrics->stopTimer();
     }
 }
 

@@ -1,10 +1,13 @@
 #ifndef SORTING_H
 #define SORTING_H
 
+#include "../metrics/Metrics.h"
+
 class Sorting
 {
 public:
-    static void bubbleSort(int arr[], int size);
+    static void bubbleSort(int arr[], int size, Metrics* metrics = nullptr);
+
     static void selectionSort(int arr[], int size);
     static void insertionSort(int arr[], int size);
     static void mergeSort(int arr[], int left, int right);
