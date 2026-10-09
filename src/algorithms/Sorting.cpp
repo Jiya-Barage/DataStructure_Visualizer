@@ -1,3 +1,4 @@
+
 #include "../../include/algorithms/Sorting.h"
 
 void Sorting::bubbleSort(int arr[], int size, Metrics* metrics)
@@ -22,19 +23,13 @@ void Sorting::bubbleSort(int arr[], int size, Metrics* metrics)
             if (arr[j] > arr[j + 1])
             {
                 int temp = arr[j];
-
-                if (metrics != nullptr)
-                    metrics->incrementAssignments();
-
                 arr[j] = arr[j + 1];
-
-                if (metrics != nullptr)
-                    metrics->incrementAssignments();
-
                 arr[j + 1] = temp;
 
                 if (metrics != nullptr)
                 {
+                    metrics->incrementAssignments();
+                    metrics->incrementAssignments();
                     metrics->incrementAssignments();
                     metrics->incrementSwaps();
                 }
@@ -43,9 +38,7 @@ void Sorting::bubbleSort(int arr[], int size, Metrics* metrics)
     }
 
     if (metrics != nullptr)
-    {
         metrics->stopTimer();
-    }
 }
 
 
@@ -85,19 +78,13 @@ void Sorting::selectionSort(int arr[], int size, Metrics* metrics)
         if (minIndex != i)
         {
             int temp = arr[i];
-
-            if (metrics != nullptr)
-                metrics->incrementAssignments();
-
             arr[i] = arr[minIndex];
-
-            if (metrics != nullptr)
-                metrics->incrementAssignments();
-
             arr[minIndex] = temp;
 
             if (metrics != nullptr)
             {
+                metrics->incrementAssignments();
+                metrics->incrementAssignments();
                 metrics->incrementAssignments();
                 metrics->incrementSwaps();
             }
@@ -105,9 +92,7 @@ void Sorting::selectionSort(int arr[], int size, Metrics* metrics)
     }
 
     if (metrics != nullptr)
-    {
         metrics->stopTimer();
-    }
 }
 
 
@@ -139,9 +124,7 @@ void Sorting::insertionSort(int arr[], int size, Metrics* metrics)
             }
 
             if (arr[j] <= key)
-            {
                 break;
-            }
 
             arr[j + 1] = arr[j];
 
@@ -157,19 +140,15 @@ void Sorting::insertionSort(int arr[], int size, Metrics* metrics)
         arr[j + 1] = key;
 
         if (metrics != nullptr)
-        {
             metrics->incrementAssignments();
-        }
     }
 
     if (metrics != nullptr)
-    {
         metrics->stopTimer();
-    }
 }
 
 
-void Sorting::merge(int arr[], int left, int mid, int right)
+void Sorting::merge(int arr[], int left, int mid, int right, Metrics* metrics)
 {
     int temp[100];
 
@@ -179,6 +158,13 @@ void Sorting::merge(int arr[], int left, int mid, int right)
 
     while (i <= mid && j <= right)
     {
+        if (metrics != nullptr)
+        {
+            metrics->incrementComparisons();
+            metrics->incrementArrayAccesses();
+            metrics->incrementArrayAccesses();
+        }
+
         if (arr[i] <= arr[j])
         {
             temp[k] = arr[i];
@@ -190,6 +176,9 @@ void Sorting::merge(int arr[], int left, int mid, int right)
             j++;
         }
 
+        if (metrics != nullptr)
+            metrics->incrementAssignments();
+
         k++;
     }
 
@@ -198,6 +187,12 @@ void Sorting::merge(int arr[], int left, int mid, int right)
         temp[k] = arr[i];
         i++;
         k++;
+
+        if (metrics != nullptr)
+        {
+            metrics->incrementArrayAccesses();
+            metrics->incrementAssignments();
+        }
     }
 
     while (j <= right)
@@ -205,63 +200,119 @@ void Sorting::merge(int arr[], int left, int mid, int right)
         temp[k] = arr[j];
         j++;
         k++;
+
+        if (metrics != nullptr)
+        {
+            metrics->incrementArrayAccesses();
+            metrics->incrementAssignments();
+        }
     }
 
     for (i = left; i <= right; i++)
     {
         arr[i] = temp[i];
+
+        if (metrics != nullptr)
+        {
+            metrics->incrementAssignments();
+            metrics->incrementArrayAccesses();
+        }
     }
 }
 
 
-void Sorting::mergeSort(int arr[], int left, int right)
+void Sorting::mergeSort(int arr[], int left, int right, Metrics* metrics)
 {
+    if (metrics != nullptr)
+        metrics->incrementRecursiveCalls();
+
     if (left >= right)
         return;
 
     int mid = left + (right - left) / 2;
 
-    mergeSort(arr, left, mid);
-    mergeSort(arr, mid + 1, right);
+    mergeSort(arr, left, mid, metrics);
+    mergeSort(arr, mid + 1, right, metrics);
 
-    merge(arr, left, mid, right);
+    merge(arr, left, mid, right, metrics);
 }
 
 
-int Sorting::partition(int arr[], int low, int high)
+int Sorting::partition(int arr[], int low, int high, Metrics* metrics)
 {
     int pivot = arr[high];
     int i = low - 1;
 
+    if (metrics != nullptr)
+    {
+        metrics->incrementAssignments();
+        metrics->incrementArrayAccesses();
+    }
+
     for (int j = low; j < high; j++)
     {
+        if (metrics != nullptr)
+        {
+            metrics->incrementComparisons();
+            metrics->incrementArrayAccesses();
+        }
+
         if (arr[j] < pivot)
         {
             i++;
 
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+            if (i != j)
+            {
+                int temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+
+                if (metrics != nullptr)
+                {
+                    metrics->incrementAssignments();
+                    metrics->incrementAssignments();
+                    metrics->incrementAssignments();
+                    metrics->incrementSwaps();
+                    metrics->incrementArrayAccesses();
+                    metrics->incrementArrayAccesses();
+                }
+            }
         }
     }
 
-    int temp = arr[i + 1];
-    arr[i + 1] = arr[high];
-    arr[high] = temp;
+    if (i + 1 != high)
+    {
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
+        arr[high] = temp;
+
+        if (metrics != nullptr)
+        {
+            metrics->incrementAssignments();
+            metrics->incrementAssignments();
+            metrics->incrementAssignments();
+            metrics->incrementSwaps();
+            metrics->incrementArrayAccesses();
+            metrics->incrementArrayAccesses();
+        }
+    }
 
     return i + 1;
 }
 
 
-void Sorting::quickSort(int arr[], int low, int high)
+void Sorting::quickSort(int arr[], int low, int high, Metrics* metrics)
 {
+    if (metrics != nullptr)
+        metrics->incrementRecursiveCalls();
+
     if (low >= high)
         return;
 
-    int pivotIndex = partition(arr, low, high);
+    int pivotIndex = partition(arr, low, high, metrics);
 
-    quickSort(arr, low, pivotIndex - 1);
-    quickSort(arr, pivotIndex + 1, high);
+    quickSort(arr, low, pivotIndex - 1, metrics);
+    quickSort(arr, pivotIndex + 1, high, metrics);
 }
 
 
@@ -273,14 +324,10 @@ void Sorting::heapify(int arr[], int size, int root)
     int right = 2 * root + 2;
 
     if (left < size && arr[left] > arr[largest])
-    {
         largest = left;
-    }
 
     if (right < size && arr[right] > arr[largest])
-    {
         largest = right;
-    }
 
     if (largest != root)
     {
@@ -296,9 +343,7 @@ void Sorting::heapify(int arr[], int size, int root)
 void Sorting::heapSort(int arr[], int size)
 {
     for (int i = size / 2 - 1; i >= 0; i--)
-    {
         heapify(arr, size, i);
-    }
 
     for (int i = size - 1; i > 0; i--)
     {

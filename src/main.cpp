@@ -1,3 +1,4 @@
+
 #include "../include/structures/Array.h"
 #include "../include/structures/LinkedList.h"
 #include "../include/structures/Stack.h"
@@ -10,7 +11,6 @@
 
 #include "../include/algorithms/Searching.h"
 #include "../include/algorithms/Sorting.h"
-
 #include "../include/metrics/Metrics.h"
 
 #include <iostream>
@@ -22,7 +22,6 @@ void displayArray(int arr[], int size)
     {
         cout << arr[i] << " ";
     }
-
     cout << endl;
 }
 
@@ -32,123 +31,102 @@ int main()
     cout << "          DSA TOOLKIT & VISUALIZER\n";
     cout << "==================================================\n\n";
 
-
+    // 1. ARRAY
     cout << "========== 1. ARRAY ==========\n";
 
     ArrayDS arrayDS;
-
     arrayDS.insert(10, 0);
     arrayDS.insert(20, 1);
     arrayDS.insert(30, 2);
     arrayDS.insert(15, 1);
-
     arrayDS.display();
 
     cout << "Searching for 20: ";
-
     if (arrayDS.search(20) != -1)
         cout << "Found\n";
     else
         cout << "Not Found\n";
 
-
+    // 2. LINKED LIST
     cout << "\n========== 2. LINKED LIST ==========\n";
 
     LinkedList list;
-
     list.insertEnd(10);
     list.insertEnd(20);
     list.insertBeginning(5);
     list.insertEnd(30);
-
     list.display();
 
     cout << "Searching for 20: ";
-
     if (list.search(20) != -1)
         cout << "Found\n";
     else
         cout << "Not Found\n";
 
-
+    // 3. STACK
     cout << "\n========== 3. STACK ==========\n";
 
     Stack stack;
-
     stack.push(10);
     stack.push(20);
     stack.push(30);
-
     stack.display();
 
     cout << "Top element: " << stack.peek() << endl;
-
     stack.pop();
-
     cout << "After pop: ";
     stack.display();
 
-
+    // 4. QUEUE
     cout << "\n========== 4. QUEUE ==========\n";
 
     Queue queue;
-
     queue.enqueue(10);
     queue.enqueue(20);
     queue.enqueue(30);
-
     queue.display();
 
     cout << "Front element: " << queue.peek() << endl;
-
     queue.dequeue();
-
     cout << "After dequeue: ";
     queue.display();
 
-
+    // 5. CIRCULAR QUEUE
     cout << "\n========== 5. CIRCULAR QUEUE ==========\n";
 
     CircularQueue circularQueue;
-
     circularQueue.enqueue(10);
     circularQueue.enqueue(20);
     circularQueue.enqueue(30);
-
     circularQueue.display();
 
     circularQueue.dequeue();
-
     circularQueue.enqueue(40);
     circularQueue.enqueue(50);
 
     cout << "After dequeue + enqueue: ";
     circularQueue.display();
 
-
+    // 6. DEQUE
     cout << "\n========== 6. DEQUE ==========\n";
 
     Deque deque;
-
     deque.insertRear(20);
     deque.insertRear(30);
     deque.insertFront(10);
-
     deque.display();
 
     cout << "Front: " << deque.getFront() << endl;
     cout << "Rear: " << deque.getRear() << endl;
 
     deque.deleteFront();
-
     cout << "After deleting front: ";
     deque.display();
 
-
+    // 7. BINARY TREE
     cout << "\n========== 7. BINARY TREE ==========\n";
 
     BinaryTree binaryTree;
-
     binaryTree.insert(10);
     binaryTree.insert(5);
     binaryTree.insert(20);
@@ -160,17 +138,15 @@ int main()
     binaryTree.postorder();
 
     cout << "Searching for 7: ";
-
     if (binaryTree.search(7))
         cout << "Found\n";
     else
         cout << "Not Found\n";
 
-
+    // 8. BINARY SEARCH TREE
     cout << "\n========== 8. BINARY SEARCH TREE ==========\n";
 
     BST bst;
-
     bst.insert(50);
     bst.insert(30);
     bst.insert(70);
@@ -184,17 +160,15 @@ int main()
     bst.postorder();
 
     cout << "Searching for 60: ";
-
     if (bst.search(60))
         cout << "Found\n";
     else
         cout << "Not Found\n";
 
-
+    // 9. AVL TREE
     cout << "\n========== 9. AVL TREE ==========\n";
 
     AVL avl;
-
     avl.insert(30);
     avl.insert(20);
     avl.insert(10);
@@ -206,13 +180,12 @@ int main()
     avl.preorder();
 
     cout << "Searching for 25: ";
-
     if (avl.search(25))
         cout << "Found\n";
     else
         cout << "Not Found\n";
 
-
+    // 10. SEARCHING ALGORITHMS
     cout << "\n========== 10. SEARCHING ALGORITHMS ==========\n";
 
     int searchArray[] = {10, 20, 30, 40, 50};
@@ -222,128 +195,127 @@ int main()
     cout << "Array: ";
     displayArray(searchArray, searchSize);
 
-
     int linearResult =
         Searching::linearSearch(searchArray, searchSize, key);
 
     cout << "Linear Search for " << key << ": ";
-
     if (linearResult != -1)
         cout << "Found at position " << linearResult << endl;
     else
         cout << "Not Found\n";
 
-
     int binaryResult =
         Searching::binarySearch(searchArray, searchSize, key);
 
     cout << "Binary Search for " << key << ": ";
-
     if (binaryResult != -1)
         cout << "Found at position " << binaryResult << endl;
     else
         cout << "Not Found\n";
 
-
+    // 11. SORTING ALGORITHMS
     cout << "\n========== 11. SORTING ALGORITHMS ==========\n";
 
     int original[] = {64, 25, 12, 22, 11};
-
     int size = 5;
 
-    int bubble[5] =
-        {64, 25, 12, 22, 11};
-
-    int selection[5] =
-        {64, 25, 12, 22, 11};
-
-    int insertion[5] =
-        {64, 25, 12, 22, 11};
-
-    int merge[5] =
-        {64, 25, 12, 22, 11};
-
-    int quick[5] =
-        {64, 25, 12, 22, 11};
-
-    int heap[5] =
-        {64, 25, 12, 22, 11};
-
+    int bubble[] = {64, 25, 12, 22, 11};
+    int selection[] = {64, 25, 12, 22, 11};
+    int insertion[] = {64, 25, 12, 22, 11};
+    int merge[] = {64, 25, 12, 22, 11};
+    int quick[] = {64, 25, 12, 22, 11};
+    int heap[] = {64, 25, 12, 22, 11};
 
     cout << "Original Array: ";
     displayArray(original, size);
 
-
     Sorting::bubbleSort(bubble, size);
-
     cout << "Bubble Sort:    ";
     displayArray(bubble, size);
 
-
     Sorting::selectionSort(selection, size);
-
     cout << "Selection Sort: ";
     displayArray(selection, size);
 
-
     Sorting::insertionSort(insertion, size);
-
     cout << "Insertion Sort: ";
     displayArray(insertion, size);
 
-
     Sorting::mergeSort(merge, 0, size - 1);
-
     cout << "Merge Sort:     ";
     displayArray(merge, size);
 
-
     Sorting::quickSort(quick, 0, size - 1);
-
     cout << "Quick Sort:     ";
     displayArray(quick, size);
 
-
     Sorting::heapSort(heap, size);
-
     cout << "Heap Sort:      ";
     displayArray(heap, size);
 
-cout << "\n========== 12. SORTING METRICS ==========\n";
+    // 12. SORTING METRICS
+    cout << "\n========== 12. SORTING METRICS ==========\n";
 
-int selectionArray[] = {64, 25, 12, 22, 11};
-int insertionArray[] = {64, 25, 12, 22, 11};
+    Metrics metrics;
 
-Metrics metrics;
+    cout << "\n--- Bubble Sort ---\n";
+    int bubbleMetricsArray[] = {64, 25, 12, 22, 11};
 
-cout << "\n--- Bubble Sort ---\n";
+    Sorting::bubbleSort(bubbleMetricsArray, 5, &metrics);
 
-int bubbleMetricsArray[] = {64, 25, 12, 22, 11};
+    cout << "Sorted Array: ";
+    displayArray(bubbleMetricsArray, 5);
+    metrics.display();
 
-Sorting::bubbleSort(bubbleMetricsArray, 5, &metrics);
+    cout << "\n--- Selection Sort ---\n";
+    int selectionMetricsArray[] = {64, 25, 12, 22, 11};
 
-cout << "Sorted Array: ";
-displayArray(bubbleMetricsArray, 5);
+    Sorting::selectionSort(selectionMetricsArray, 5, &metrics);
 
-metrics.display();
+    cout << "Sorted Array: ";
+    displayArray(selectionMetricsArray, 5);
+    metrics.display();
 
+    cout << "\n--- Insertion Sort ---\n";
+    int insertionMetricsArray[] = {64, 25, 12, 22, 11};
 
-cout << "\n--- Selection Sort ---\n";
+    Sorting::insertionSort(insertionMetricsArray, 5, &metrics);
 
-Sorting::selectionSort(selectionArray, 5, &metrics);
+    cout << "Sorted Array: ";
+    displayArray(insertionMetricsArray, 5);
+    metrics.display();
 
-cout << "Sorted Array: ";
-displayArray(selectionArray, 5);
+    cout << "\n--- Merge Sort ---\n";
+    int mergeMetricsArray[] = {64, 25, 12, 22, 11};
 
-metrics.display();
+    metrics.reset();
+    metrics.startTimer();
 
+    Sorting::mergeSort(mergeMetricsArray, 0, 4, &metrics);
 
-cout << "\n--- Insertion Sort ---\n";
+    metrics.stopTimer();
 
-Sorting::insertionSort(insertionArray, 5, &metrics);
+    cout << "Sorted Array: ";
+    displayArray(mergeMetricsArray, 5);
+    metrics.display();
 
-cout << "Sorted Array: ";
-displayArray(insertionArray, 5);
+    cout << "\n--- Quick Sort ---\n";
+    int quickMetricsArray[] = {64, 25, 12, 22, 11};
 
-metrics.display();
+    metrics.reset();
+    metrics.startTimer();
+
+    Sorting::quickSort(quickMetricsArray, 0, 4, &metrics);
+
+    metrics.stopTimer();
+
+    cout << "Sorted Array: ";
+    displayArray(quickMetricsArray, 5);
+    metrics.display();
+
+    cout << "\n==================================================\n";
+    cout << "             DEMONSTRATION COMPLETE\n";
+    cout << "==================================================\n";
+
+    return 0;
 }
