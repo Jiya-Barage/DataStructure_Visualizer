@@ -1,4 +1,4 @@
-
+#include "../include/learning/LearningMode.h"
 #include "../include/structures/Array.h"
 #include "../include/structures/LinkedList.h"
 #include "../include/structures/Stack.h"
@@ -329,6 +329,7 @@ int main()
 
     ExperimentLab::compareSortingAlgorithms();
 
-    ComplexityAnalyzer::displayComplexityTable();    
+    ComplexityAnalyzer::displayComplexityTable(); 
+    LearningMode::run();   
     return 0;
 }
