@@ -185,7 +185,8 @@ int main()
     else
         cout << "Not Found\n";
 
-    // 10. SEARCHING ALGORITHMS
+   
+    // ========== 10. SEARCHING ALGORITHMS ==========
     cout << "\n========== 10. SEARCHING ALGORITHMS ==========\n";
 
     int searchArray[] = {10, 20, 30, 40, 50};
@@ -195,24 +196,32 @@ int main()
     cout << "Array: ";
     displayArray(searchArray, searchSize);
 
-    int linearResult =
-        Searching::linearSearch(searchArray, searchSize, key);
+    Metrics searchMetrics;
 
-    cout << "Linear Search for " << key << ": ";
+    cout << "\n--- Linear Search ---\n";
+    int linearResult = Searching::linearSearch(
+        searchArray, searchSize, key, &searchMetrics
+    );
+
     if (linearResult != -1)
-        cout << "Found at position " << linearResult << endl;
+        cout << "Found at position: " << linearResult << endl;
     else
-        cout << "Not Found\n";
+        cout << "Element not found\n";
 
-    int binaryResult =
-        Searching::binarySearch(searchArray, searchSize, key);
+    searchMetrics.display();
 
-    cout << "Binary Search for " << key << ": ";
+    cout << "\n--- Binary Search ---\n";
+    int binaryResult = Searching::binarySearch(
+        searchArray, searchSize, key, &searchMetrics
+    );
+
     if (binaryResult != -1)
-        cout << "Found at position " << binaryResult << endl;
+        cout << "Found at position: " << binaryResult << endl;
     else
-        cout << "Not Found\n";
+        cout << "Element not found\n";
 
+    searchMetrics.display();
+    
     // 11. SORTING ALGORITHMS
     cout << "\n========== 11. SORTING ALGORITHMS ==========\n";
 
