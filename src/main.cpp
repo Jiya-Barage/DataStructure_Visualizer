@@ -12,7 +12,7 @@
 #include "../include/algorithms/Searching.h"
 #include "../include/algorithms/Sorting.h"
 #include "../include/metrics/Metrics.h"
-
+#include "../include/analysis/ComplexityAnalyzer.h"
 #include <iostream>
 using namespace std;
 
@@ -328,6 +328,7 @@ int main()
 
 
     ExperimentLab::compareSortingAlgorithms();
-    
+
+    ComplexityAnalyzer::displayComplexityTable();    
     return 0;
 }
