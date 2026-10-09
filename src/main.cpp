@@ -25,7 +25,7 @@ void displayArray(int arr[], int size)
     cout << endl;
 }
 
-int main()
+void runAllDemos()
 {
     cout << "==================================================\n";
     cout << "          DSA TOOLKIT & VISUALIZER\n";
@@ -326,10 +326,65 @@ int main()
     cout << "             DEMONSTRATION COMPLETE\n";
     cout << "==================================================\n";
 
+}
 
-    ExperimentLab::compareSortingAlgorithms();
 
-    ComplexityAnalyzer::displayComplexityTable(); 
-    LearningMode::run();   
+int main()
+{
+    int choice = -1;
+
+    do
+    {
+        cout << "\n";
+        cout << "============================================\n";
+        cout << "         DSA TOOLKIT & VISUALIZER\n";
+        cout << "============================================\n";
+        cout << "1. Data Structures and Algorithm Demos\n";
+        cout << "2. Experiment Lab\n";
+        cout << "3. Complexity Analysis\n";
+        cout << "4. Learning and Testing Mode\n";
+        cout << "0. Exit\n";
+        cout << "--------------------------------------------\n";
+        cout << "Enter your choice: ";
+
+        cin >> choice;
+
+        if (cin.fail())
+        {
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Invalid input. Please enter a number.\n";
+            choice = -1;
+            continue;
+        }
+
+        switch (choice)
+        {
+            case 1:
+                runAllDemos();
+                break;
+
+            case 2:
+                ExperimentLab::compareSortingAlgorithms();
+                break;
+
+            case 3:
+                ComplexityAnalyzer::displayComplexityTable();
+                break;
+
+            case 4:
+                LearningMode::run();
+                break;
+
+            case 0:
+                cout << "Thank you for using the DSA Toolkit!\n";
+                break;
+
+            default:
+                cout << "Invalid choice. Please select 0 to 4.\n";
+        }
+
+    } while (choice != 0);
+
     return 0;
 }
