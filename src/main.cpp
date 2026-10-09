@@ -8,7 +8,7 @@
 #include "../include/structures/BinaryTree.h"
 #include "../include/structures/BST.h"
 #include "../include/structures/AVL.h"
-
+#include "../include/experiments/ExperimentLab.h"
 #include "../include/algorithms/Searching.h"
 #include "../include/algorithms/Sorting.h"
 #include "../include/metrics/Metrics.h"
@@ -221,7 +221,7 @@ int main()
         cout << "Element not found\n";
 
     searchMetrics.display();
-    
+
     // 11. SORTING ALGORITHMS
     cout << "\n========== 11. SORTING ALGORITHMS ==========\n";
 
@@ -326,5 +326,8 @@ int main()
     cout << "             DEMONSTRATION COMPLETE\n";
     cout << "==================================================\n";
 
+
+    ExperimentLab::compareSortingAlgorithms();
+    
     return 0;
 }
