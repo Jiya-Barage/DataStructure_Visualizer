@@ -63,6 +63,17 @@ void runAllDemos()
     else
         cout << "Not Found\n";
 
+    cout << "Linked List size: " << list.size() << endl;
+
+    int nodeValue;
+
+    if (list.getElement(0, nodeValue))
+        cout << "First node: " << nodeValue << endl;
+
+    if (list.getElement(list.size() - 1, nodeValue))
+        cout << "Last node: " << nodeValue << endl;
+
+
     // 3. STACK
     cout << "\n========== 3. STACK ==========\n";
 
