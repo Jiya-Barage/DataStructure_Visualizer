@@ -72,10 +72,15 @@ void runAllDemos()
     stack.push(30);
     stack.display();
 
+
     cout << "Top element: " << stack.peek() << endl;
+
     stack.pop();
     cout << "After pop: ";
     stack.display();
+
+    cout << "Stack size: " << stack.size() << endl;
+    cout << "Bottom element: " << stack.getElement(0) << endl;
 
     // 4. QUEUE
     cout << "\n========== 4. QUEUE ==========\n";
@@ -86,10 +91,15 @@ void runAllDemos()
     queue.enqueue(30);
     queue.display();
 
+
     cout << "Front element: " << queue.peek() << endl;
+
     queue.dequeue();
     cout << "After dequeue: ";
     queue.display();
+
+    cout << "Queue size: " << queue.size() << endl;
+    cout << "Front element by index: " << queue.getElement(0) << endl;
 
     // 5. CIRCULAR QUEUE
     cout << "\n========== 5. CIRCULAR QUEUE ==========\n";

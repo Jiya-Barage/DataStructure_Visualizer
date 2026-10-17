@@ -1,5 +1,7 @@
+
 #include "../../include/structures/Stack.h"
 #include <iostream>
+
 using namespace std;
 
 Stack::Stack()
@@ -7,27 +9,29 @@ Stack::Stack()
     top = -1;
 }
 
-void Stack::push(int value)
+bool Stack::push(int value)
 {
     if (isFull())
     {
         cout << "Stack overflow.\n";
-        return;
+        return false;
     }
 
     top++;
     arr[top] = value;
+    return true;
 }
 
-void Stack::pop()
+bool Stack::pop()
 {
     if (isEmpty())
     {
         cout << "Stack underflow.\n";
-        return;
+        return false;
     }
 
     top--;
+    return true;
 }
 
 int Stack::peek()
@@ -51,6 +55,20 @@ bool Stack::isFull()
     return top == 99;
 }
 
+int Stack::size()
+{
+    return top + 1;
+}
+
+// Returns elements from bottom to top.
+int Stack::getElement(int index)
+{
+    if (index < 0 || index >= size())
+        return -1;
+
+    return arr[index];
+}
+
 void Stack::display()
 {
     if (isEmpty())
@@ -62,9 +80,7 @@ void Stack::display()
     cout << "Stack: ";
 
     for (int i = top; i >= 0; i--)
-    {
         cout << arr[i] << " ";
-    }
 
     cout << endl;
 }

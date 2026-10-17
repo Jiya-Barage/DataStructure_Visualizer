@@ -1,3 +1,4 @@
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -11,11 +12,16 @@ private:
 public:
     Queue();
 
-    void enqueue(int value);
-    void dequeue();
+    bool enqueue(int value);
+    bool dequeue();
     int peek();
+
     bool isEmpty();
     bool isFull();
+
+    int size();
+    int getElement(int index);
+
     void display();
 };
 

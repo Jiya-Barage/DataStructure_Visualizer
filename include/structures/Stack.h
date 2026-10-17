@@ -1,3 +1,4 @@
+
 #ifndef STACK_H
 #define STACK_H
 
@@ -10,11 +11,16 @@ private:
 public:
     Stack();
 
-    void push(int value);
-    void pop();
+    bool push(int value);
+    bool pop();
     int peek();
+
     bool isEmpty();
     bool isFull();
+
+    int size();
+    int getElement(int index);
+
     void display();
 };
 
