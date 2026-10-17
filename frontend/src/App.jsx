@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import SortingVisualizer from "./SortingVisualizer";
 import "./App.css";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
     "Stack initialized with 10, 20, 30",
   ]);
 
+  const isSorting = activeStructure === "Sorting";
   const isStack = activeStructure === "Stack";
   const values = isStack ? stack : queue;
 
@@ -121,17 +123,26 @@ function App() {
         </button>
 
         <button
-          className={`nav-item ${!isStack ? "active" : ""}`}
+          className={`nav-item ${
+            activeStructure === "Queue" ? "active" : ""
+          }`}
           onClick={() => switchStructure("Queue")}
         >
           <span>⇥</span> Queue
         </button>
 
+        <button
+          className={`nav-item ${isSorting ? "active" : ""}`}
+          onClick={() => switchStructure("Sorting")}
+        >
+          <span>▥</span> Sorting Visualizer
+        </button>
+
         <div className="nav-label">COMING NEXT</div>
         <div className="upcoming-item">Linked List</div>
         <div className="upcoming-item">Trees &amp; Graphs</div>
-        <div className="upcoming-item">Sorting Visualizer</div>
         <div className="upcoming-item">Experiment Lab</div>
+        <div className="upcoming-item">Complexity Analysis</div>
 
         <div className="sidebar-footer">
           <span className="status-dot" />
@@ -143,7 +154,7 @@ function App() {
         <header className="topbar">
           <div>
             <p className="eyebrow">LEARN BY DOING</p>
-            <h2>Structure Playground</h2>
+            <h2>{isSorting ? "Sorting Visualizer" : "Structure Playground"}</h2>
           </div>
 
           <div className="topbar-actions">
@@ -154,7 +165,9 @@ function App() {
                   current === "dark" ? "light" : "dark"
                 )
               }
-              aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+              aria-label={`Switch to ${
+                theme === "dark" ? "light" : "dark"
+              } mode`}
               aria-pressed={theme === "light"}
             >
               {theme === "dark" ? "☀ Light mode" : "☾ Dark mode"}
@@ -164,171 +177,182 @@ function App() {
           </div>
         </header>
 
-        <section className="welcome">
-          <div>
-            <p className="welcome-kicker">YOUR DATA STRUCTURE LAB</p>
-            <h3>Make every operation visible.</h3>
-            <p>
-              Explore how data moves, changes, and behaves with each
-              operation.
-            </p>
-          </div>
-          <div className="welcome-symbol" aria-hidden="true">⌘</div>
-        </section>
-
-        <section className="stats-grid">
-          <StatCard
-            label="ACTIVE STRUCTURE"
-            value={activeStructure}
-            detail="Current playground"
-          />
-          <StatCard
-            label="CURRENT ELEMENTS"
-            value={values.length}
-            detail="Stored values"
-          />
-          <StatCard
-            label="MAX CAPACITY"
-            value="100"
-            detail="Fixed-size model"
-          />
-          <StatCard
-            label="OPERATIONS"
-            value={operations}
-            detail="Successful changes"
-          />
-        </section>
-
-        <div className="content-grid">
-          <section className="panel visualization-panel">
-            <div className="panel-heading">
+        {isSorting ? (
+          <SortingVisualizer />
+        ) : (
+          <>
+            <section className="welcome">
               <div>
-                <p className="eyebrow">LIVE VIEW</p>
-                <h3>{activeStructure} Visualization</h3>
+                <p className="welcome-kicker">YOUR DATA STRUCTURE LAB</p>
+                <h3>Make every operation visible.</h3>
+                <p>
+                  Explore how data moves, changes, and behaves with each
+                  operation.
+                </p>
               </div>
-              <span className="complexity-pill">
-                {isStack ? "LIFO" : "FIFO"}
-              </span>
-            </div>
+              <div className="welcome-symbol" aria-hidden="true">⌘</div>
+            </section>
 
-            <div className="visual-stage">
-              {values.length === 0 ? (
-                <div className="empty-state">
-                  <span>○</span>
-                  <p>Your {activeStructure.toLowerCase()} is empty.</p>
-                  <small>Add a value to get started.</small>
+            <section className="stats-grid">
+              <StatCard
+                label="ACTIVE STRUCTURE"
+                value={activeStructure}
+                detail="Current playground"
+              />
+              <StatCard
+                label="CURRENT ELEMENTS"
+                value={values.length}
+                detail="Stored values"
+              />
+              <StatCard
+                label="MAX CAPACITY"
+                value="100"
+                detail="Fixed-size model"
+              />
+              <StatCard
+                label="OPERATIONS"
+                value={operations}
+                detail="Successful changes"
+              />
+            </section>
+
+            <div className="content-grid">
+              <section className="panel visualization-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">LIVE VIEW</p>
+                    <h3>{activeStructure} Visualization</h3>
+                  </div>
+                  <span className="complexity-pill">
+                    {isStack ? "LIFO" : "FIFO"}
+                  </span>
                 </div>
-              ) : isStack ? (
-                <div className="stack-visual">
-                  {visibleValues.map((value, index) => (
-                    <div className="stack-row" key={index}>
-                      <span className="element-label">
-                        {index === 0 ? "TOP →" : ""}
-                      </span>
-                      <div
-                        className={`data-block ${
-                          index === 0 ? "highlight" : ""
-                        }`}
-                      >
-                        {value}
+
+                <div className="visual-stage">
+                  {values.length === 0 ? (
+                    <div className="empty-state">
+                      <span>○</span>
+                      <p>Your {activeStructure.toLowerCase()} is empty.</p>
+                      <small>Add a value to get started.</small>
+                    </div>
+                  ) : isStack ? (
+                    <div className="stack-visual">
+                      {visibleValues.map((value, index) => (
+                        <div className="stack-row" key={index}>
+                          <span className="element-label">
+                            {index === 0 ? "TOP →" : ""}
+                          </span>
+                          <div
+                            className={`data-block ${
+                              index === 0 ? "highlight" : ""
+                            }`}
+                          >
+                            {value}
+                          </div>
+                        </div>
+                      ))}
+                      <div className="structure-base">STACK BASE</div>
+                    </div>
+                  ) : (
+                    <div className="queue-visual">
+                      <div className="queue-end-labels">
+                        <span>FRONT</span>
+                        <span>REAR</span>
                       </div>
+                      <div className="queue-track">
+                        {values.map((value, index) => (
+                          <div
+                            className={`queue-block ${
+                              index === 0 ? "highlight" : ""
+                            }`}
+                            key={index}
+                          >
+                            {value}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="visual-hint">
+                        Items leave from the front and enter at the rear.
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="controls">
+                  <label htmlFor="valueInput">Value</label>
+                  <input
+                    id="valueInput"
+                    type="number"
+                    step="1"
+                    value={input}
+                    onChange={(event) => setInput(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") addValue();
+                    }}
+                    placeholder="Enter an integer"
+                  />
+
+                  <button className="primary-btn" onClick={addValue}>
+                    {isStack ? "+ Push" : "+ Enqueue"}
+                  </button>
+
+                  <button className="secondary-btn" onClick={removeValue}>
+                    {isStack ? "− Pop" : "− Dequeue"}
+                  </button>
+
+                  <button className="secondary-btn" onClick={peekValue}>
+                    Peek
+                  </button>
+
+                  <button className="reset-btn" onClick={resetStructure}>
+                    Reset
+                  </button>
+                </div>
+
+                <div className="notice" role="status" aria-live="polite">
+                  <span className="notice-dot" />
+                  {notice}
+                </div>
+              </section>
+
+              <aside className="panel activity-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">SESSION</p>
+                    <h3>Activity Log</h3>
+                  </div>
+                  <span className="live-label">LIVE</span>
+                </div>
+
+                <div className="activity-list">
+                  {activity.map((message, index) => (
+                    <div
+                      className="activity-entry"
+                      key={`${message}-${index}`}
+                    >
+                      <div className="activity-line">
+                        <span className="activity-dot" />
+                      </div>
+                      <p>{message}</p>
                     </div>
                   ))}
-                  <div className="structure-base">STACK BASE</div>
                 </div>
-              ) : (
-                <div className="queue-visual">
-                  <div className="queue-end-labels">
-                    <span>FRONT</span>
-                    <span>REAR</span>
-                  </div>
-                  <div className="queue-track">
-                    {values.map((value, index) => (
-                      <div
-                        className={`queue-block ${
-                          index === 0 ? "highlight" : ""
-                        }`}
-                        key={index}
-                      >
-                        {value}
-                      </div>
-                    ))}
-                  </div>
-                  <p className="visual-hint">
-                    Items leave from the front and enter at the rear.
+
+                <div className="concept-card">
+                  <p className="eyebrow">CORE CONCEPT</p>
+                  <h4>
+                    {isStack ? "Last In, First Out" : "First In, First Out"}
+                  </h4>
+                  <p>
+                    {isStack
+                      ? "A stack removes the most recently added element first."
+                      : "A queue removes the earliest added element first."}
                   </p>
                 </div>
-              )}
+              </aside>
             </div>
-
-            <div className="controls">
-              <label htmlFor="valueInput">Value</label>
-              <input
-                id="valueInput"
-                type="number"
-                step="1"
-                value={input}
-                onChange={(event) => setInput(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") addValue();
-                }}
-                placeholder="Enter an integer"
-              />
-
-              <button className="primary-btn" onClick={addValue}>
-                {isStack ? "+ Push" : "+ Enqueue"}
-              </button>
-
-              <button className="secondary-btn" onClick={removeValue}>
-                {isStack ? "− Pop" : "− Dequeue"}
-              </button>
-
-              <button className="secondary-btn" onClick={peekValue}>
-                Peek
-              </button>
-
-              <button className="reset-btn" onClick={resetStructure}>
-                Reset
-              </button>
-            </div>
-
-            <div className="notice" role="status" aria-live="polite">
-              <span className="notice-dot" />
-              {notice}
-            </div>
-          </section>
-
-          <aside className="panel activity-panel">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">SESSION</p>
-                <h3>Activity Log</h3>
-              </div>
-              <span className="live-label">LIVE</span>
-            </div>
-
-            <div className="activity-list">
-              {activity.map((message, index) => (
-                <div className="activity-entry" key={`${message}-${index}`}>
-                  <div className="activity-line">
-                    <span className="activity-dot" />
-                  </div>
-                  <p>{message}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="concept-card">
-              <p className="eyebrow">CORE CONCEPT</p>
-              <h4>{isStack ? "Last In, First Out" : "First In, First Out"}</h4>
-              <p>
-                {isStack
-                  ? "A stack removes the most recently added element first."
-                  : "A queue removes the earliest added element first."}
-              </p>
-            </div>
-          </aside>
-        </div>
+          </>
+        )}
 
         <footer className="page-footer">
           <span>DSA Toolkit &amp; Visualizer</span>
