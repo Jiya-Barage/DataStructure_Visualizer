@@ -709,3 +709,95 @@
     transition: none !important;
   }
 }
+
+/* Sorting algorithm selector */
+.sv-algorithm-select {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 15px;
+  border: 1px solid var(--sv-border);
+  border-radius: 12px;
+  background: var(--sv-panel);
+}
+
+.sv-algorithm-select label {
+  color: var(--sv-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sv-algorithm-select select {
+  min-width: 180px;
+  padding: 10px 12px;
+  border: 1px solid var(--sv-border);
+  border-radius: 9px;
+  background: var(--sv-input);
+  color: var(--sv-text);
+  font: inherit;
+  font-size: 12px;
+  outline: none;
+}
+
+.sv-algorithm-select select:focus-visible {
+  outline: 2px solid var(--sv-accent);
+  outline-offset: 3px;
+}
+
+/* Selection Sort marks its current minimum in lavender. */
+.sv-cell.sv-card-select {
+  border-color: #b7a0ff;
+  background: #292440;
+  box-shadow: 0 0 0 2px #b7a0ff22, 0 0 22px #b7a0ff20;
+}
+
+.sv-card-select .sv-card {
+  border-color: #c4b2ff;
+  background: linear-gradient(145deg, #9273eb, #6b51c8);
+  color: #ffffff;
+  box-shadow: 0 5px 0 #493583, 0 10px 20px #8061e930;
+}
+
+.sv-status-select {
+  color: #d3c5ff;
+  border-color: #55477e;
+  background: #282343;
+}
+
+.sv-message-select .sv-message-icon {
+  color: #c8b6ff;
+  border-color: #55477e;
+  background: #282343;
+}
+
+/* Light-mode variants */
+.light-theme .sv-algorithm-select select {
+  background: #ffffff;
+  color: #302744;
+}
+
+.light-theme .sv-cell.sv-card-select {
+  border-color: #7961df;
+  background: #e9e1ff;
+  box-shadow: 0 0 0 2px #7961df18, 0 0 21px #7961df15;
+}
+
+.light-theme .sv-card-select .sv-card {
+  color: #ffffff;
+  border-color: #9279e7;
+  background: linear-gradient(145deg, #9e87f0, #7159ce);
+  box-shadow: 0 5px 0 #5843a5, 0 10px 19px #7961df22;
+}
+
+.light-theme .sv-status-select {
+  color: #674bce;
+  background: #f0ebff;
+  border-color: #d9cef9;
+}
+
+.light-theme .sv-message-select .sv-message-icon {
+  color: #674bce;
+  background: #f0ebff;
+  border-color: #d9cef9;
+}
