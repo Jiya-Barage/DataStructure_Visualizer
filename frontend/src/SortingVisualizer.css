@@ -801,3 +801,471 @@
   background: #f0ebff;
   border-color: #d9cef9;
 }
+
+/* =========================================
+   MERGE SORT — DIVIDE AND MERGE STATES
+========================================= */
+
+.sv-algorithm-select select {
+  max-width: 100%;
+}
+
+.sv-split-marker {
+  display: block;
+  min-height: 17px;
+  margin-bottom: 4px;
+  text-align: center;
+  color: transparent;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: 0.6px;
+}
+
+.sv-array-item.sv-in-split .sv-cell {
+  border-color: #8061e9;
+  background: #26213e;
+}
+
+.sv-array-item.sv-split-before {
+  border-left: 2px dashed #ff91b5;
+  padding-left: 6px;
+}
+
+.sv-array-item.sv-split-before .sv-split-marker {
+  color: #ff91b5;
+}
+
+.sv-array-item.sv-in-merge .sv-cell {
+  border-color: #7de6bc;
+  box-shadow: 0 0 13px #7de6bc12;
+}
+
+.sv-card-merging .sv-card {
+  border-color: #ffb3ca;
+  background: linear-gradient(145deg, #f37fa6, #ce5e8c);
+  color: #ffffff;
+  box-shadow: 0 5px 0 #8f3e64, 0 10px 20px #ff91b535;
+}
+
+.sv-status-split {
+  color: #d3c5ff;
+  border-color: #55477e;
+  background: #282343;
+}
+
+.sv-status-merge-compare {
+  color: #d3c5ff;
+  border-color: #55477e;
+  background: #282343;
+}
+
+.sv-status-merge-select,
+.sv-status-merge-place {
+  color: #ffd0df;
+  border-color: #8a4665;
+  background: #42243a;
+}
+
+.sv-message-merge-compare .sv-message-icon,
+.sv-message-split .sv-message-icon {
+  color: #c8b6ff;
+  border-color: #55477e;
+  background: #282343;
+}
+
+.sv-message-merge-select .sv-message-icon,
+.sv-message-merge-place .sv-message-icon {
+  color: #ffb3ca;
+  border-color: #8a4665;
+  background: #42243a;
+}
+
+.sv-merge-tray {
+  margin-top: 20px;
+  padding: 14px;
+  border: 1px dashed #8a4665;
+  border-radius: 11px;
+  background: #211927;
+  animation: sv-tray-appear 220ms ease-out;
+}
+
+.sv-merge-tray-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sv-merge-tray-heading .sv-eyebrow {
+  margin: 0;
+  color: #ffb3ca;
+}
+
+.sv-merge-count {
+  color: #c5b5cb;
+  font-size: 10px;
+}
+
+.sv-merge-output {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-height: 37px;
+}
+
+.sv-merge-chip {
+  min-width: 39px;
+  padding: 10px 12px;
+  text-align: center;
+  border: 1px solid #bd6086;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #633451, #482940);
+  color: #fff1f7;
+  font-size: 13px;
+  font-weight: 850;
+  box-shadow: 0 3px 0 #302033;
+  animation: sv-chip-appear 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes sv-tray-appear {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sv-chip-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.93);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Light mode: retain the Aurora Bloom palette. */
+
+.light-theme .sv-array-item.sv-in-split .sv-cell {
+  border-color: #7961df;
+  background: #eee9ff;
+}
+
+.light-theme .sv-array-item.sv-split-before {
+  border-left-color: #d94d7d;
+}
+
+.light-theme .sv-array-item.sv-split-before .sv-split-marker {
+  color: #b73767;
+}
+
+.light-theme .sv-array-item.sv-in-merge .sv-cell {
+  border-color: #49b991;
+  box-shadow: 0 0 13px #16836510;
+}
+
+.light-theme .sv-card-merging .sv-card {
+  border-color: #e36a94;
+  background: linear-gradient(145deg, #ef82a5, #cb4e7c);
+  color: #ffffff;
+  box-shadow: 0 5px 0 #a53762, 0 10px 20px #d94d7d20;
+}
+
+.light-theme .sv-status-split,
+.light-theme .sv-status-merge-compare {
+  color: #674bce;
+  background: #f0ebff;
+  border-color: #d9cef9;
+}
+
+.light-theme .sv-status-merge-select,
+.light-theme .sv-status-merge-place {
+  color: #a62d5c;
+  background: #fff0f5;
+  border-color: #f3c0d2;
+}
+
+.light-theme .sv-message-merge-compare .sv-message-icon,
+.light-theme .sv-message-split .sv-message-icon {
+  color: #674bce;
+  background: #f0ebff;
+  border-color: #d9cef9;
+}
+
+.light-theme .sv-message-merge-select .sv-message-icon,
+.light-theme .sv-message-merge-place .sv-message-icon {
+  color: #a62d5c;
+  background: #fff0f5;
+  border-color: #f3c0d2;
+}
+
+.light-theme .sv-merge-tray {
+  border-color: #e8a9c1;
+  background: #fff5f8;
+}
+
+.light-theme .sv-merge-tray-heading .sv-eyebrow {
+  color: #b73767;
+}
+
+.light-theme .sv-merge-count {
+  color: #80647b;
+}
+
+.light-theme .sv-merge-chip {
+  color: #762449;
+  border-color: #e9a2bc;
+  background: linear-gradient(145deg, #ffe3ee, #fbd1e2);
+  box-shadow: 0 3px 0 #ebc0d1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-merge-tray,
+  .sv-merge-chip {
+    animation: none !important;
+  }
+}
+
+/* =========================================
+   MERGE SORT — TREE GRAPH VISUALIZATION
+========================================= */
+
+.sv-merge-tree-panel {
+  min-width: 0;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid var(--sv-border);
+  border-radius: 14px;
+  background: var(--sv-panel);
+}
+
+.sv-tree-description {
+  color: var(--sv-muted);
+  font-size: 12px;
+  line-height: 1.7;
+  margin: 12px 0 0;
+}
+
+.sv-tree-scroll {
+  overflow-x: auto;
+  margin-top: 18px;
+  padding: 14px 8px 22px;
+  border: 1px solid var(--sv-border);
+  border-radius: 12px;
+  background: var(--sv-stage);
+}
+
+.sv-tree {
+  display: flex;
+  justify-content: center;
+  min-height: 100px;
+}
+
+.sv-tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+.sv-tree-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 76px;
+  padding: 9px 4px;
+  border: 1px solid #514774;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #302a4d, #211f38);
+  color: #f3edff;
+  text-align: center;
+  box-shadow: 0 4px 0 #151328, 0 7px 15px #0002;
+  transition:
+    background 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.sv-tree-range {
+  color: #c6b4ff;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.sv-tree-values {
+  font-size: clamp(10px, 1.3vw, 14px);
+  font-weight: 850;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.sv-tree-node-caption {
+  color: #b1a8ce;
+  font-size: 9px;
+}
+
+/* Each parent branches into two children below it. */
+
+.sv-tree-children {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  width: 100%;
+  gap: 12px;
+  padding-top: 26px;
+}
+
+.sv-tree-children::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 13px;
+  border-left: 1px solid #8c79c6;
+}
+
+.sv-tree-children::after {
+  content: "";
+  position: absolute;
+  top: 13px;
+  left: 25%;
+  right: 25%;
+  border-top: 1px solid #8c79c6;
+}
+
+.sv-tree-child {
+  position: relative;
+  min-width: 0;
+  display: flex;
+}
+
+.sv-tree-child::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: -13px;
+  left: 50%;
+  height: 13px;
+  border-left: 1px solid #8c79c6;
+}
+
+/* Current recursion step */
+
+.sv-tree-card.sv-tree-splitting {
+  border-color: #b7a0ff;
+  background: linear-gradient(145deg, #59418c, #382b60);
+  box-shadow: 0 0 0 2px #b7a0ff25, 0 0 20px #b7a0ff20;
+}
+
+.sv-tree-card.sv-tree-merging {
+  border-color: #ff91b5;
+  background: linear-gradient(145deg, #723652, #48243d);
+  box-shadow: 0 0 0 2px #ff91b520, 0 0 20px #ff91b51a;
+}
+
+.sv-tree-card.sv-tree-placed {
+  border-color: #7de6bc;
+  background: linear-gradient(145deg, #245e4d, #193d38);
+  box-shadow: 0 0 0 2px #7de6bc18, 0 0 18px #7de6bc14;
+}
+
+.sv-tree-card.sv-tree-placed .sv-tree-range,
+.sv-tree-card.sv-tree-placed .sv-tree-node-caption {
+  color: #a5f3d3;
+}
+
+/* Light Mode */
+
+.light-theme .sv-tree-scroll {
+  background: #faf8ff;
+}
+
+.light-theme .sv-tree-card {
+  border-color: #d1c6f0;
+  background: linear-gradient(145deg, #ffffff, #eee8ff);
+  color: #40335f;
+  box-shadow: 0 4px 0 #ded5f1, 0 7px 15px #59458b0a;
+}
+
+.light-theme .sv-tree-range {
+  color: #7961c8;
+}
+
+.light-theme .sv-tree-node-caption {
+  color: #756b91;
+}
+
+.light-theme .sv-tree-children::before,
+.light-theme .sv-tree-children::after,
+.light-theme .sv-tree-child::before {
+  border-color: #b7a6e1;
+}
+
+.light-theme .sv-tree-card.sv-tree-splitting {
+  background: linear-gradient(145deg, #e8e0ff, #d8cbff);
+  border-color: #9279e7;
+  box-shadow: 0 0 0 2px #7961df12;
+}
+
+.light-theme .sv-tree-card.sv-tree-merging {
+  background: linear-gradient(145deg, #ffe3ee, #fbd1e2);
+  border-color: #e9a2bc;
+  color: #762449;
+}
+
+.light-theme .sv-tree-card.sv-tree-placed {
+  background: linear-gradient(145deg, #d7f5e8, #b9ead7);
+  border-color: #69c4a1;
+  color: #155b45;
+}
+
+.light-theme .sv-tree-card.sv-tree-placed .sv-tree-range,
+.light-theme .sv-tree-card.sv-tree-placed .sv-tree-node-caption {
+  color: #176b50;
+}
+
+@media (max-width: 650px) {
+  .sv-merge-tree-panel {
+    padding: 12px;
+  }
+
+  .sv-tree-scroll {
+    padding: 12px 6px 18px;
+  }
+
+  .sv-tree-card {
+    min-height: 65px;
+    border-radius: 8px;
+  }
+
+  .sv-tree-children {
+    gap: 7px;
+    padding-top: 22px;
+  }
+
+  .sv-tree-children::before {
+    height: 11px;
+  }
+
+  .sv-tree-children::after {
+    top: 11px;
+  }
+
+  .sv-tree-child::before {
+    top: -11px;
+    height: 11px;
+  }
+}

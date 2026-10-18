@@ -10,14 +10,15 @@ import "./SortingVisualizer.css";
 
 const STARTING_ARRAY = [64, 34, 25, 12, 22, 11, 90];
 
-function makeFlags(length, condition) {
-  return Array.from({ length }, (_, index) => condition(index));
-}
-
 function copyArray(items) {
   return items.map((item) => ({ ...item }));
 }
 
+function makeFlags(length, condition) {
+  return Array.from({ length }, (_, index) => condition(index));
+}
+
+// Build the comparison, swap, and merge steps before animation begins.
 function buildSortFrames(items, algorithm) {
   const array = copyArray(items);
   const n = array.length;
@@ -26,13 +27,14 @@ function buildSortFrames(items, algorithm) {
   let comparisons = 0;
   let swaps = 0;
 
-  const addFrame = (
+  function addFrame(
     action,
     left,
     right,
     message,
-    sortedIndices = makeFlags(n, () => false)
-  ) => {
+    sortedIndices = makeFlags(n, () => false),
+    extra = {}
+  ) {
     frames.push({
       array: copyArray(array),
       left,
@@ -42,8 +44,9 @@ function buildSortFrames(items, algorithm) {
       sortedIndices: [...sortedIndices],
       action,
       message,
+      ...extra,
     });
-  };
+  }
 
   addFrame(
     "ready",
@@ -52,6 +55,7 @@ function buildSortFrames(items, algorithm) {
     `Ready to run ${algorithm}. Press Play or Step to begin.`
   );
 
+  // BUBBLE SORT
   if (algorithm === "Bubble Sort") {
     for (let i = 0; i < n - 1; i++) {
       const sorted = makeFlags(n, (index) => index >= n - i);
@@ -67,20 +71,23 @@ function buildSortFrames(items, algorithm) {
           j,
           j + 1,
           first > second
-            ? `Compare ${first} and ${second}. The left value is larger, so they need to swap.`
-            : `Compare ${first} and ${second}. They are already in the correct relative order.`,
+            ? `Compare ${first} and ${second}. ${first} is larger, so these elements must swap.`
+            : `Compare ${first} and ${second}. Their relative order is already correct.`,
           sorted
         );
 
         if (first > second) {
-          [array[j], array[j + 1]] = [array[j + 1], array[j]];
+          [array[j], array[j + 1]] = [
+            array[j + 1],
+            array[j],
+          ];
           swaps++;
 
           addFrame(
             "swap",
             j,
             j + 1,
-            `Swap ${first} and ${second}. Their cards exchange positions.`,
+            `Swap ${first} and ${second}. The cards exchange positions.`,
             sorted
           );
         }
@@ -90,12 +97,13 @@ function buildSortFrames(items, algorithm) {
         "pass",
         -1,
         -1,
-        `Pass ${i + 1} complete. ${array[n - i - 1].value} is now in its final position.`,
+        `Pass ${i + 1} complete. ${array[n - i - 1].value} has reached its final position.`,
         makeFlags(n, (index) => index >= n - i - 1)
       );
     }
   }
 
+  // SELECTION SORT
   if (algorithm === "Selection Sort") {
     for (let i = 0; i < n - 1; i++) {
       let minIndex = i;
@@ -111,7 +119,7 @@ function buildSortFrames(items, algorithm) {
           "compare",
           minIndex,
           j,
-          `Compare the current minimum ${minimum} with ${candidate}.`,
+          `Compare current minimum ${minimum} with ${candidate}.`,
           sortedPrefix
         );
 
@@ -122,7 +130,7 @@ function buildSortFrames(items, algorithm) {
             "select",
             minIndex,
             -1,
-            `${candidate} is the new minimum. Keep track of its position.`,
+            `${candidate} is the new minimum. Remember its index.`,
             sortedPrefix
           );
         }
@@ -132,14 +140,17 @@ function buildSortFrames(items, algorithm) {
         const first = array[i].value;
         const second = array[minIndex].value;
 
-        [array[i], array[minIndex]] = [array[minIndex], array[i]];
+        [array[i], array[minIndex]] = [
+          array[minIndex],
+          array[i],
+        ];
         swaps++;
 
         addFrame(
           "swap",
           i,
           minIndex,
-          `Place minimum ${second} at index ${i} by swapping it with ${first}.`,
+          `Move minimum ${second} to index ${i} by swapping it with ${first}.`,
           sortedPrefix
         );
       }
@@ -154,6 +165,7 @@ function buildSortFrames(items, algorithm) {
     }
   }
 
+  // INSERTION SORT
   if (algorithm === "Insertion Sort") {
     for (let i = 1; i < n; i++) {
       let j = i;
@@ -168,20 +180,21 @@ function buildSortFrames(items, algorithm) {
           "compare",
           j - 1,
           j,
-          `Compare ${first} with ${second}. Decide whether ${second} needs to move left.`,
-          makeFlags(n, () => false)
+          `Compare ${first} with ${second}. Should ${second} move left?`
         );
 
         if (first > second) {
-          [array[j - 1], array[j]] = [array[j], array[j - 1]];
+          [array[j - 1], array[j]] = [
+            array[j],
+            array[j - 1],
+          ];
           swaps++;
 
           addFrame(
             "swap",
             j - 1,
             j,
-            `${second} is smaller than ${first}, so move ${second} one position left.`,
-            makeFlags(n, () => false)
+            `${second} is smaller than ${first}. Move it one position left.`
           );
 
           j--;
@@ -200,12 +213,168 @@ function buildSortFrames(items, algorithm) {
     }
   }
 
+  // MERGE SORT
+  if (algorithm === "Merge Sort") {
+    function mergeSort(left, right) {
+      if (left >= right) return;
+
+      const mid = Math.floor((left + right) / 2);
+
+      addFrame(
+        "split",
+        -1,
+        -1,
+        `Split range [${left}, ${right}] into [${left}, ${mid}] and [${mid + 1}, ${right}].`,
+        makeFlags(n, () => false),
+        {
+          rangeStart: left,
+          rangeEnd: right,
+          splitAt: mid + 1,
+        }
+      );
+
+      mergeSort(left, mid);
+      mergeSort(mid + 1, right);
+
+      const temp = [];
+      let i = left;
+      let j = mid + 1;
+
+      // Compare the front elements of the two sorted groups.
+      while (i <= mid && j <= right) {
+        const first = array[i].value;
+        const second = array[j].value;
+
+        comparisons++;
+
+        addFrame(
+          "merge-compare",
+          i,
+          j,
+          `Compare ${first} from the left group with ${second} from the right group.`,
+          makeFlags(n, () => false),
+          {
+            rangeStart: left,
+            rangeEnd: right,
+            splitAt: mid + 1,
+            mergeOutput: copyArray(temp),
+          }
+        );
+
+        if (first <= second) {
+          temp.push(array[i]);
+
+          addFrame(
+            "merge-select",
+            i,
+            -1,
+            `${first} is smaller or equal. Take it from the left group into the merge buffer.`,
+            makeFlags(n, () => false),
+            {
+              rangeStart: left,
+              rangeEnd: right,
+              splitAt: mid + 1,
+              mergeOutput: copyArray(temp),
+            }
+          );
+
+          i++;
+        } else {
+          temp.push(array[j]);
+
+          addFrame(
+            "merge-select",
+            j,
+            -1,
+            `${second} is smaller. Take it from the right group into the merge buffer.`,
+            makeFlags(n, () => false),
+            {
+              rangeStart: left,
+              rangeEnd: right,
+              splitAt: mid + 1,
+              mergeOutput: copyArray(temp),
+            }
+          );
+
+          j++;
+        }
+      }
+
+      while (i <= mid) {
+        temp.push(array[i]);
+
+        addFrame(
+          "merge-select",
+          i,
+          -1,
+          `The right group is exhausted. Take ${array[i].value} from the left group.`,
+          makeFlags(n, () => false),
+          {
+            rangeStart: left,
+            rangeEnd: right,
+            splitAt: mid + 1,
+            mergeOutput: copyArray(temp),
+          }
+        );
+
+        i++;
+      }
+
+      while (j <= right) {
+        temp.push(array[j]);
+
+        addFrame(
+          "merge-select",
+          j,
+          -1,
+          `The left group is exhausted. Take ${array[j].value} from the right group.`,
+          makeFlags(n, () => false),
+          {
+            rangeStart: left,
+            rangeEnd: right,
+            splitAt: mid + 1,
+            mergeOutput: copyArray(temp),
+          }
+        );
+
+        j++;
+      }
+
+      // Place the merged group back into the array.
+      for (let k = 0; k < temp.length; k++) {
+        array[left + k] = temp[k];
+      }
+
+      addFrame(
+        "merge-place",
+        -1,
+        -1,
+        `Merge complete! Range [${left}, ${right}] is now sorted. Its cards move into their new positions.`,
+        makeFlags(n, () => false),
+        {
+          rangeStart: left,
+          rangeEnd: right,
+          splitAt: -1,
+          mergeOutput: [],
+        }
+      );
+    }
+
+    mergeSort(0, n - 1);
+  }
+
   addFrame(
     "complete",
     -1,
     -1,
     `${algorithm} complete! The array is sorted in ascending order.`,
-    makeFlags(n, () => true)
+    makeFlags(n, () => true),
+    {
+      rangeStart: 0,
+      rangeEnd: n - 1,
+      splitAt: -1,
+      mergeOutput: [],
+    }
   );
 
   return frames;
@@ -218,7 +387,7 @@ const ALGORITHM_INFO = {
     worst: "O(n²)",
     space: "O(1)",
     note:
-      "This version does not use early-exit optimization, so even sorted input takes O(n²) time.",
+      "This version has no early-exit optimization, so even sorted input takes O(n²) time.",
   },
   "Selection Sort": {
     best: "O(n²)",
@@ -226,7 +395,7 @@ const ALGORITHM_INFO = {
     worst: "O(n²)",
     space: "O(1)",
     note:
-      "Selection Sort scans the remaining unsorted section to find its minimum on every pass.",
+      "Selection Sort scans the remaining unsorted section on every pass.",
   },
   "Insertion Sort": {
     best: "O(n)",
@@ -234,9 +403,134 @@ const ALGORITHM_INFO = {
     worst: "O(n²)",
     space: "O(1)",
     note:
-      "This version moves elements left using adjacent swaps. Already sorted input requires only linear comparisons.",
+      "This adjacent-swap version takes O(n) time on sorted input and O(n²) in the average and worst cases.",
+  },
+  "Merge Sort": {
+    best: "O(n log n)",
+    average: "O(n log n)",
+    worst: "O(n log n)",
+    space: "O(n)",
+    note:
+      "Merge Sort recursively divides the array and combines sorted groups using a temporary buffer.",
   },
 };
+
+// Graph-style tree for Merge Sort.
+function MergeSortTree({ items, frame }) {
+  const isMergeAction = frame.action.startsWith("merge");
+
+  function renderNode(left, right) {
+    const values = items
+      .slice(left, right + 1)
+      .map((item) => item.value);
+
+    const isActive =
+      frame.rangeStart === left &&
+      frame.rangeEnd === right &&
+      (frame.action === "split" || isMergeAction);
+
+    let state = "";
+
+    if (isActive && frame.action === "split") {
+      state = "sv-tree-splitting";
+    } else if (isActive && frame.action === "merge-place") {
+      state = "sv-tree-placed";
+    } else if (isActive && isMergeAction) {
+      state = "sv-tree-merging";
+    }
+
+    const middle = Math.floor((left + right) / 2);
+    const isLeaf = left === right;
+
+    return (
+      <div className="sv-tree-node" key={`${left}-${right}`}>
+        <div className={`sv-tree-card ${state}`}>
+          <span className="sv-tree-range">
+            [{left}–{right}]
+          </span>
+
+          <div className="sv-tree-values">
+            {values.join(" · ")}
+          </div>
+
+          <span className="sv-tree-node-caption">
+            {isLeaf
+              ? "Single element"
+              : isActive && frame.action === "split"
+                ? "Splitting..."
+                : isActive && frame.action === "merge-place"
+                  ? "Merged"
+                  : isActive && isMergeAction
+                    ? "Merging..."
+                    : `${values.length} elements`}
+          </span>
+        </div>
+
+        {!isLeaf && (
+          <div className="sv-tree-children">
+            <div className="sv-tree-child">
+              {renderNode(left, middle)}
+            </div>
+
+            <div className="sv-tree-child">
+              {renderNode(middle + 1, right)}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (items.length === 0) return null;
+
+  return (
+    <section className="sv-merge-tree-panel">
+      <div className="sv-panel-heading">
+        <div>
+          <p className="sv-eyebrow">RECURSION MAP</p>
+          <h3>How the array splits</h3>
+        </div>
+
+        <span className="sv-status sv-status-split">
+          TOP → DOWN
+        </span>
+      </div>
+
+      <p className="sv-tree-description">
+        Follow the branches from the original array to single elements.
+        Then watch each group merge back in sorted order.
+      </p>
+
+      <div className="sv-tree-scroll">
+        <div
+          className="sv-tree"
+          style={{
+            minWidth: `${Math.max(620, items.length * 84)}px`,
+          }}
+        >
+          {renderNode(0, items.length - 1)}
+        </div>
+      </div>
+
+      <div className="sv-legend">
+        <span>
+          <i className="sv-legend-compare" />
+          Splitting · Lavender
+        </span>
+
+        <span>
+          <i className="sv-legend-swap" />
+          Merging · Coral
+        </span>
+
+        <span>
+          <i className="sv-legend-sorted" />
+          Merged · Mint
+        </span>
+      </div>
+    </section>
+  );
+}
 
 function SortingVisualizer() {
   const [algorithm, setAlgorithm] = useState("Bubble Sort");
@@ -270,6 +564,7 @@ function SortingVisualizer() {
   const isComplete = safeFrameIndex === frames.length - 1;
   const info = ALGORITHM_INFO[algorithm];
 
+  // Animate each card from its previous position to its new position.
   useLayoutEffect(() => {
     const currentPositions = new Map();
 
@@ -314,15 +609,19 @@ function SortingVisualizer() {
   });
 
   useEffect(() => {
-    if (!isPlaying || isComplete) {
-      if (isComplete) setIsPlaying(false);
-      return undefined;
-    }
+    if (!isPlaying || isComplete) return undefined;
 
     const timer = window.setTimeout(() => {
-      setCurrentFrame((current) =>
-        Math.min(current + 1, frames.length - 1)
+      const nextFrame = Math.min(
+        currentFrame + 1,
+        frames.length - 1
       );
+
+      setCurrentFrame(nextFrame);
+
+      if (nextFrame >= frames.length - 1) {
+        setIsPlaying(false);
+      }
     }, speed);
 
     return () => window.clearTimeout(timer);
@@ -419,6 +718,10 @@ function SortingVisualizer() {
     select: "NEW MINIMUM",
     swap: "SWAPPING",
     pass: "PASS COMPLETE",
+    split: "SPLITTING",
+    "merge-compare": "MERGING · COMPARE",
+    "merge-select": "MERGING · SELECT",
+    "merge-place": "MERGE COMPLETE",
     complete: "SORTED",
   }[frame.action];
 
@@ -433,7 +736,7 @@ function SortingVisualizer() {
           <p className="sv-eyebrow">ALGORITHM PLAYGROUND</p>
           <h2>Sorting Studio</h2>
           <p className="sv-description">
-            Choose an algorithm and watch each comparison and movement.
+            Explore comparisons, swaps, recursive splits, and merge steps.
           </p>
         </div>
 
@@ -450,6 +753,7 @@ function SortingVisualizer() {
           <option>Bubble Sort</option>
           <option>Selection Sort</option>
           <option>Insertion Sort</option>
+          <option>Merge Sort</option>
         </select>
       </div>
 
@@ -481,14 +785,17 @@ function SortingVisualizer() {
           <span>Comparisons</span>
           <strong>{frame.comparisons}</strong>
         </div>
+
         <div className="sv-stat">
           <span>Swaps</span>
           <strong>{frame.swaps}</strong>
         </div>
+
         <div className="sv-stat">
           <span>Array size</span>
           <strong>{originalItems.length}</strong>
         </div>
+
         <div className="sv-stat">
           <span>Progress</span>
           <strong>{progress}%</strong>
@@ -499,7 +806,11 @@ function SortingVisualizer() {
         <div className="sv-panel-heading">
           <div>
             <p className="sv-eyebrow">LIVE ARRAY</p>
-            <h3>Compare · Swap · Settle</h3>
+            <h3>
+              {algorithm === "Merge Sort"
+                ? "Split · Compare · Merge"
+                : "Compare · Swap · Settle"}
+            </h3>
           </div>
 
           <span className={`sv-status sv-status-${frame.action}`}>
@@ -521,7 +832,7 @@ function SortingVisualizer() {
               "--array-columns": frame.array.length,
               minWidth:
                 frame.array.length > 10
-                  ? `${frame.array.length * 62}px`
+                  ? `${frame.array.length * 72}px`
                   : "100%",
             }}
           >
@@ -530,13 +841,24 @@ function SortingVisualizer() {
                 index === frame.left || index === frame.right;
               const isSorted = frame.sortedIndices[index];
 
+              const inSplitRange =
+                frame.rangeStart !== undefined &&
+                index >= frame.rangeStart &&
+                index <= frame.rangeEnd;
+
               let cardState = "";
 
               if (isActive) {
                 if (frame.action === "swap") {
                   cardState = "sv-card-swapping";
-                } else if (frame.action === "select") {
-                  cardState = "sv-card-select";
+                } else if (
+                  frame.action === "select" ||
+                  frame.action === "merge-select"
+                ) {
+                  cardState =
+                    frame.action === "merge-select"
+                      ? "sv-card-merging"
+                      : "sv-card-select";
                 } else {
                   cardState = "sv-card-comparing";
                 }
@@ -544,12 +866,33 @@ function SortingVisualizer() {
                 cardState = "sv-card-sorted";
               }
 
+              const itemClasses = [
+                "sv-array-item",
+                frame.action === "split" && inSplitRange
+                  ? "sv-in-split"
+                  : "",
+                frame.action === "split" && frame.splitAt === index
+                  ? "sv-split-before"
+                  : "",
+                frame.action === "merge-place" && inSplitRange
+                  ? "sv-in-merge"
+                  : "",
+              ]
+                .filter(Boolean)
+                .join(" ");
+
               return (
                 <div
-                  className="sv-array-item"
+                  className={itemClasses}
                   key={item.id}
                   ref={(node) => registerItem(item.id, node)}
                 >
+                  <span className="sv-split-marker">
+                    {frame.action === "split" && frame.splitAt === index
+                      ? "SPLIT"
+                      : "\u00a0"}
+                  </span>
+
                   <div className={`sv-cell ${cardState}`}>
                     <div className="sv-card">
                       <span className="sv-card-value">{item.value}</span>
@@ -561,7 +904,33 @@ function SortingVisualizer() {
               );
             })}
           </div>
+
+          {frame.mergeOutput && frame.mergeOutput.length > 0 && (
+            <div className="sv-merge-tray">
+              <div className="sv-merge-tray-heading">
+                <span className="sv-eyebrow">MERGE BUFFER</span>
+                <span className="sv-merge-count">
+                  {frame.mergeOutput.length} selected
+                </span>
+              </div>
+
+              <div className="sv-merge-output">
+                {frame.mergeOutput.map((item, index) => (
+                  <div
+                    className="sv-merge-chip"
+                    key={`${item.id}-${index}`}
+                  >
+                    {item.value}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
+
+        {algorithm === "Merge Sort" && (
+          <MergeSortTree items={frame.array} frame={frame} />
+        )}
 
         <div className="sv-legend">
           <span><i className="sv-legend-compare" /> Comparing · Lavender</span>
@@ -569,17 +938,23 @@ function SortingVisualizer() {
           <span><i className="sv-legend-sorted" /> Sorted · Mint</span>
         </div>
 
-        <div className={`sv-message sv-message-${frame.action}`} role="status" aria-live="polite">
+        <div
+          className={`sv-message sv-message-${frame.action}`}
+          role="status"
+          aria-live="polite"
+        >
           <span className="sv-message-icon">
             {frame.action === "swap"
               ? "⇄"
-              : frame.action === "complete"
-                ? "✓"
-                : frame.action === "compare"
-                  ? "↔"
-                  : frame.action === "select"
-                    ? "✦"
-                    : "→"}
+              : frame.action === "split"
+                ? "⑂"
+                : frame.action.startsWith("merge")
+                  ? "↘"
+                  : frame.action === "complete"
+                    ? "✓"
+                    : frame.action === "compare"
+                      ? "↔"
+                      : "✦"}
           </span>
 
           <div>
@@ -592,9 +967,17 @@ function SortingVisualizer() {
                     ? "New minimum"
                     : frame.action === "pass"
                       ? "Pass finished"
-                      : frame.action === "complete"
-                        ? "All sorted!"
-                        : "Ready to begin"}
+                      : frame.action === "split"
+                        ? "Divide the array"
+                        : frame.action === "merge-compare"
+                          ? "Compare merge candidates"
+                          : frame.action === "merge-select"
+                            ? "Add to merge buffer"
+                            : frame.action === "merge-place"
+                              ? "Place merged group"
+                              : frame.action === "complete"
+                                ? "All sorted!"
+                                : "Ready to begin"}
             </strong>
 
             <p>{frame.message}</p>
@@ -607,12 +990,19 @@ function SortingVisualizer() {
               {isComplete ? "↻ Play again" : "▶ Play"}
             </button>
           ) : (
-            <button className="sv-btn sv-primary" onClick={() => setIsPlaying(false)}>
+            <button
+              className="sv-btn sv-primary"
+              onClick={() => setIsPlaying(false)}
+            >
               Ⅱ Pause
             </button>
           )}
 
-          <button className="sv-btn" onClick={stepForward} disabled={isComplete}>
+          <button
+            className="sv-btn"
+            onClick={stepForward}
+            disabled={isComplete}
+          >
             Step →
           </button>
 
@@ -640,10 +1030,12 @@ function SortingVisualizer() {
 
         <p>
           {algorithm === "Bubble Sort"
-            ? "Bubble Sort compares neighbouring elements and swaps them when they are out of order. Larger values gradually move toward the right."
+            ? "Bubble Sort compares neighbouring elements and swaps them when they are out of order. Larger values move toward the right."
             : algorithm === "Selection Sort"
-              ? "Selection Sort scans the unsorted section, remembers the smallest value, and moves it to the next position in the sorted prefix."
-              : "Insertion Sort takes the next element and moves it left through adjacent swaps until it fits in the sorted prefix."}
+              ? "Selection Sort finds the minimum in the unsorted section and places it at the beginning of that section."
+              : algorithm === "Insertion Sort"
+                ? "Insertion Sort takes the next element and moves it left through adjacent swaps until it fits in the sorted prefix."
+                : "Merge Sort recursively divides the array into smaller groups, then combines those groups by choosing the smallest available front element."}
         </p>
 
         <div className="sv-complexities">
