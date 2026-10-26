@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import SortingVisualizer from "./SortingVisualizer";
+import SearchingVisualizer from "./SearchingVisualizer";
 import "./App.css";
 
 function App() {
