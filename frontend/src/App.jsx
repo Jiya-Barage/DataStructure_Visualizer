@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import SortingVisualizer from "./SortingVisualizer";
-import SearchingVisualizer from "./SearchingVisualizer";
+import LinkedListVisualizer from "./LinkedListVisualizer";
 import "./App.css";
 
 function App() {
@@ -179,8 +179,11 @@ function App() {
         </header>
 
         {isSorting ? (
-          <SortingVisualizer />
-        ) : (
+    <>
+        <SortingVisualizer />
+        <LinkedListVisualizer />
+    </>
+) : (
           <>
             <section className="welcome">
               <div>
