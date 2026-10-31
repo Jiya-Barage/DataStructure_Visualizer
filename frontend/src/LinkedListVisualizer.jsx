@@ -1,134 +1,140 @@
-
 import { useState } from "react";
+import "./Extras.css";
+
+const DEFAULT_LIST = [10, 20, 30];
 
 export default function LinkedListVisualizer() {
-  const [list, setList] = useState([10, 20, 30]);
+  const [list, setList] = useState(DEFAULT_LIST);
   const [value, setValue] = useState("");
   const [position, setPosition] = useState("");
-  const [message, setMessage] = useState("Linked List is ready!");
+  const [hit, setHit] = useState(-1);
+  const [message, setMessage] = useState("Linked list is ready.");
 
-  function insertEnd() {
-    if (value.trim() === "" || !Number.isFinite(Number(value))) {
-      setMessage("Enter a valid number.");
-      return;
-    }
+  const num = Number(value);
+  const validValue = value.trim() !== "" && Number.isFinite(num);
+  const idx = Number(position);
+  const validIndex = (max) =>
+    position.trim() !== "" && Number.isInteger(idx) && idx >= 0 && idx <= max;
 
-    setList([...list, Number(value)]);
-    setMessage(`${value} inserted at the end.`);
-    setValue("");
+  function say(text) {
+    setMessage(text);
+    setHit(-1);
   }
 
   function insertBeginning() {
-    if (value.trim() === "" || !Number.isFinite(Number(value))) {
-      setMessage("Enter a valid number.");
-      return;
-    }
-
-    setList([Number(value), ...list]);
-    setMessage(`${value} inserted at the beginning.`);
+    if (!validValue) return say("Enter a valid number first.");
+    setList([num, ...list]);
+    say(`Inserted ${num} at the head (O(1)).`);
     setValue("");
   }
 
-  function deleteNode() {
-    const index = Number(position);
+  function insertEnd() {
+    if (!validValue) return say("Enter a valid number first.");
+    setList([...list, num]);
+    say(`Inserted ${num} at the tail after traversing ${list.length} node(s).`);
+    setValue("");
+  }
 
-    if (position.trim() === "" || !Number.isInteger(index) ||
-        index < 0 || index >= list.length) {
-      setMessage("Enter a valid index.");
-      return;
-    }
-
-    const updated = [...list];
-    const removed = updated.splice(index, 1)[0];
-    setList(updated);
-    setMessage(`${removed} deleted from index ${index}.`);
+  function insertAt() {
+    if (!validValue) return say("Enter a valid number first.");
+    if (!validIndex(list.length)) return say(`Index must be between 0 and ${list.length}.`);
+    const copy = [...list];
+    copy.splice(idx, 0, num);
+    setList(copy);
+    say(`Inserted ${num} at index ${idx}.`);
+    setValue("");
     setPosition("");
   }
 
-  function searchNode() {
-    if (value.trim() === "" || !Number.isFinite(Number(value))) {
-      setMessage("Enter a number to search.");
-      return;
+  function deleteAt() {
+    if (!validIndex(list.length - 1)) return say(`Enter an index between 0 and ${list.length - 1}.`);
+    const copy = [...list];
+    const [removed] = copy.splice(idx, 1);
+    setList(copy);
+    say(`Deleted ${removed} from index ${idx}.`);
+    setPosition("");
+  }
+
+  function search() {
+    if (!validValue) return say("Enter a number to search for.");
+    const found = list.indexOf(num);
+    if (found === -1) {
+      say(`${num} not found after checking ${list.length} node(s).`);
+    } else {
+      setHit(found);
+      setMessage(`${num} found at index ${found} after ${found + 1} comparison(s).`);
     }
+  }
 
-    const index = list.indexOf(Number(value));
-
-    setMessage(
-      index === -1
-        ? `${value} was not found.`
-        : `${value} found at index ${index}.`
-    );
+  function reverse() {
+    setList([...list].reverse());
+    say("List reversed by re-pointing every next link.");
   }
 
   return (
-    <section style={{ padding: "24px", borderRadius: "16px" }}>
-      <h2>Linked List Visualizer</h2>
-      <p>Explore nodes, links, insertion, deletion and searching.</p>
+    <div className="x-page">
+      <section className="x-card">
+        <h3>Singly Linked List</h3>
+        <p className="x-sub">Each node stores a value and a pointer to the next node.</p>
 
-      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        <input
-          type="number"
-          placeholder="Enter value"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <button onClick={insertBeginning}>Insert Beginning</button>
-        <button onClick={insertEnd}>Insert End</button>
-        <button onClick={searchNode}>Search</button>
-      </div>
-
-      <div style={{ display: "flex", gap: "12px", flexWrap: "wrap",
-                    alignItems: "center", margin: "28px 0" }}>
-        {list.map((node, index) => (
-          <div key={index} style={{ display: "flex", alignItems: "center",
-                                    gap: "12px" }}>
-            <div style={{
-              border: "2px solid #38bdf8",
-              borderRadius: "10px",
-              padding: "16px 22px",
-              minWidth: "45px",
-              textAlign: "center",
-              background: "#0f172a",
-              color: "#ffffff",
-              fontWeight: "bold"
-            }}>
-              {node}
-              <div style={{ fontSize: "11px", color: "#7dd3fc" }}>
-                Index {index}
-              </div>
+        <div className="x-stage">
+          {list.length === 0 ? (
+            <p>HEAD → NULL (empty list)</p>
+          ) : (
+            <div className="ll-chain">
+              <span className="ll-tag">HEAD</span>
+              {list.map((node, i) => (
+                <div key={i} style={{ display: "contents" }}>
+                  <div className={`ll-node ${hit === i ? "hit" : ""}`}>
+                    <div className="ll-val">
+                      {node}
+                      <small>idx {i}</small>
+                    </div>
+                    <div className="ll-ptr">next</div>
+                  </div>
+                  <span className="ll-arrow">→</span>
+                </div>
+              ))}
+              <span className="ll-tag">NULL</span>
             </div>
-            {index < list.length - 1 && <span>⟶</span>}
-          </div>
-        ))}
-        <span>⟶ NULL</span>
-      </div>
+          )}
+        </div>
 
-      {list.length === 0 && <p>Head → NULL (empty list)</p>}
+        <div className="x-row">
+          <input type="number" placeholder="Value" value={value} onChange={(e) => setValue(e.target.value)} />
+          <input type="number" placeholder="Index" value={position} onChange={(e) => setPosition(e.target.value)} />
+        </div>
+        <div className="x-row">
+          <button className="x-btn primary" onClick={insertBeginning}>Insert head</button>
+          <button className="x-btn primary" onClick={insertEnd}>Insert tail</button>
+          <button className="x-btn" onClick={insertAt}>Insert at index</button>
+          <button className="x-btn" onClick={deleteAt}>Delete at index</button>
+          <button className="x-btn" onClick={search}>Search value</button>
+          <button className="x-btn" onClick={reverse}>Reverse</button>
+          <button className="x-btn" onClick={() => { setList([]); say("List cleared."); }}>Clear</button>
+          <button className="x-btn" onClick={() => { setList(DEFAULT_LIST); say("List reset."); }}>Reset</button>
+        </div>
 
-      <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-        <input
-          type="number"
-          placeholder="Index to delete"
-          value={position}
-          onChange={(e) => setPosition(e.target.value)}
-        />
-        <button onClick={deleteNode}>Delete at Index</button>
-        <button onClick={() => {
-          setList([]);
-          setMessage("Linked List cleared.");
-        }}>
-          Clear List
-        </button>
-        <button onClick={() => {
-          setList([10, 20, 30]);
-          setMessage("List reset to default.");
-        }}>
-          Reset
-        </button>
-      </div>
+        <div className="x-msg" role="status" aria-live="polite">{message}</div>
+      </section>
 
-      <p style={{ marginTop: "20px" }}>{message}</p>
-      <p>Total nodes: {list.length}</p>
-    </section>
+      <section className="x-card">
+        <h3>Complexity</h3>
+        <div className="lab-scroll">
+          <table className="lab-table">
+            <thead><tr><th>Operation</th><th>Time</th></tr></thead>
+            <tbody>
+              <tr><td>Insert at head</td><td>O(1)</td></tr>
+              <tr><td>Insert at tail (no tail pointer)</td><td>O(n)</td></tr>
+              <tr><td>Delete / insert at index</td><td>O(n)</td></tr>
+              <tr><td>Search</td><td>O(n)</td></tr>
+              <tr><td>Reverse</td><td>O(n)</td></tr>
+              <tr><td>Space</td><td>O(n)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="x-sub" style={{ marginTop: 12 }}>Nodes now: {list.length}</p>
+      </section>
+    </div>
   );
 }

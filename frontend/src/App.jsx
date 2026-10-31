@@ -1,7 +1,10 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SortingVisualizer from "./SortingVisualizer";
+import SearchingVisualizer from "./SearchingVisualizer";
 import LinkedListVisualizer from "./LinkedListVisualizer";
+import TreeVisualizer from "./TreeVisualizer";
+import ExperimentLab from "./ExperimentLab";
 import "./App.css";
 
 function App() {
@@ -11,12 +14,35 @@ function App() {
   const [input, setInput] = useState("40");
   const [operations, setOperations] = useState(0);
   const [notice, setNotice] = useState("Choose an operation to begin.");
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem("dsa-theme") === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  });
   const [activity, setActivity] = useState([
     "Stack initialized with 10, 20, 30",
   ]);
 
-  const isSorting = activeStructure === "Sorting";
+  useEffect(() => {
+    try {
+      localStorage.setItem("dsa-theme", theme);
+    } catch {
+      /* storage unavailable: ignore */
+    }
+    document.documentElement.dataset.theme = theme;
+  }, [theme]);
+
+  const PAGES = {
+    Sorting: { title: "Sorting Visualizer", view: <SortingVisualizer /> },
+    Searching: { title: "Searching Visualizer", view: <SearchingVisualizer /> },
+    "Linked List": { title: "Linked List Visualizer", view: <LinkedListVisualizer /> },
+    Trees: { title: "Binary Search Tree", view: <TreeVisualizer /> },
+    "Experiment Lab": { title: "Experiment Lab & Complexity", view: <ExperimentLab /> },
+  };
+  const page = PAGES[activeStructure];
+  const isSorting = Boolean(page);
   const isStack = activeStructure === "Stack";
   const values = isStack ? stack : queue;
 
@@ -132,22 +158,45 @@ function App() {
           <span>⇥</span> Queue
         </button>
 
-        <button
-          className={`nav-item ${isSorting ? "active" : ""}`}
-          onClick={() => switchStructure("Sorting")}
-        >
-          <span>▥</span> Sorting Visualizer
-        </button>
+        <div className="nav-label">ALGORITHMS</div>
+        {[
+          ["Sorting", "▥", "Sorting Visualizer"],
+          ["Searching", "⌕", "Searching Visualizer"],
+        ].map(([key, icon, label]) => (
+          <button
+            key={key}
+            className={`nav-item ${activeStructure === key ? "active" : ""}`}
+            onClick={() => switchStructure(key)}
+          >
+            <span>{icon}</span> {label}
+          </button>
+        ))}
 
-        <div className="nav-label">COMING NEXT</div>
-        <div className="upcoming-item">Linked List</div>
-        <div className="upcoming-item">Trees &amp; Graphs</div>
-        <div className="upcoming-item">Experiment Lab</div>
-        <div className="upcoming-item">Complexity Analysis</div>
+        <div className="nav-label">MORE STRUCTURES</div>
+        {[
+          ["Linked List", "⟶", "Linked List"],
+          ["Trees", "⑂", "Binary Search Tree"],
+        ].map(([key, icon, label]) => (
+          <button
+            key={key}
+            className={`nav-item ${activeStructure === key ? "active" : ""}`}
+            onClick={() => switchStructure(key)}
+          >
+            <span>{icon}</span> {label}
+          </button>
+        ))}
+
+        <div className="nav-label">ANALYSIS</div>
+        <button
+          className={`nav-item ${activeStructure === "Experiment Lab" ? "active" : ""}`}
+          onClick={() => switchStructure("Experiment Lab")}
+        >
+          <span>⚗</span> Experiment Lab
+        </button>
 
         <div className="sidebar-footer">
           <span className="status-dot" />
-          <span>Interactive preview</span>
+          <span>Interactive web edition</span>
         </div>
       </aside>
 
@@ -155,7 +204,7 @@ function App() {
         <header className="topbar">
           <div>
             <p className="eyebrow">LEARN BY DOING</p>
-            <h2>{isSorting ? "Sorting Visualizer" : "Structure Playground"}</h2>
+            <h2>{page ? page.title : "Structure Playground"}</h2>
           </div>
 
           <div className="topbar-actions">
@@ -174,16 +223,13 @@ function App() {
               {theme === "dark" ? "☀ Light mode" : "☾ Dark mode"}
             </button>
 
-            <div className="version-pill">WEB PREVIEW · V1</div>
+            <div className="version-pill">WEB EDITION · V2</div>
           </div>
         </header>
 
         {isSorting ? (
-    <>
-        <SortingVisualizer />
-        <LinkedListVisualizer />
-    </>
-) : (
+          page.view
+        ) : (
           <>
             <section className="welcome">
               <div>
@@ -360,7 +406,7 @@ function App() {
 
         <footer className="page-footer">
           <span>DSA Toolkit &amp; Visualizer</span>
-          <span>Built step by step · C++ integration comes later</span>
+          <span>C++ core + React visualizer · Group 15</span>
         </footer>
       </main>
     </div>

@@ -12,6 +12,9 @@
 #include "../include/algorithms/Searching.h"
 #include "../include/algorithms/Sorting.h"
 #include "../include/metrics/Metrics.h"
+#include "../include/structures/Heap.h"
+#include "../include/structures/HashTable.h"
+#include "../include/algorithms/Graph.h"
 #include "../include/analysis/ComplexityAnalyzer.h"
 #include <iostream>
 using namespace std;
@@ -350,6 +353,45 @@ void runAllDemos()
 }
 
 
+void runAdvancedDemos()
+{
+    cout << "\n========== HEAP ==========\n";
+    Heap maxHeap(true);
+    int heapValues[] = {15, 40, 8, 23, 4, 42};
+    for (int v : heapValues)
+        maxHeap.insert(v);
+    maxHeap.display();
+    int top;
+    maxHeap.extractTop(top);
+    cout << "Extracted max: " << top << endl;
+    maxHeap.display();
+
+    cout << "\n========== HASH TABLE (separate chaining) ==========\n";
+    HashTable table;
+    for (int k = 1; k <= 14; k += 1)
+        table.put(k * 5, k);
+    table.display();
+    int found;
+    cout << "get(25): " << (table.get(25, found) ? "found" : "missing") << endl;
+
+    cout << "\n========== GRAPH ==========\n";
+    Graph graph(6);
+    graph.addEdge(0, 1, 7);
+    graph.addEdge(0, 2, 9);
+    graph.addEdge(0, 5, 14);
+    graph.addEdge(1, 2, 10);
+    graph.addEdge(1, 3, 15);
+    graph.addEdge(2, 3, 11);
+    graph.addEdge(2, 5, 2);
+    graph.addEdge(3, 4, 6);
+    graph.addEdge(4, 5, 9);
+    graph.display();
+    graph.bfs(0);
+    graph.dfs(0);
+    graph.shortestPaths(0);
+    cout << "Contains a cycle: " << (graph.hasCycle() ? "yes" : "no") << endl;
+}
+
 int main()
 {
     int choice = -1;
@@ -364,6 +406,7 @@ int main()
         cout << "2. Experiment Lab\n";
         cout << "3. Complexity Analysis\n";
         cout << "4. Learning and Testing Mode\n";
+        cout << "5. Heap, Hash Table and Graph Demos\n";
         cout << "0. Exit\n";
         cout << "--------------------------------------------\n";
         cout << "Enter your choice: ";
@@ -397,12 +440,16 @@ int main()
                 LearningMode::run();
                 break;
 
+            case 5:
+                runAdvancedDemos();
+                break;
+
             case 0:
                 cout << "Thank you for using the DSA Toolkit!\n";
                 break;
 
             default:
-                cout << "Invalid choice. Please select 0 to 4.\n";
+                cout << "Invalid choice. Please select 0 to 5.\n";
         }
 
     } while (choice != 0);

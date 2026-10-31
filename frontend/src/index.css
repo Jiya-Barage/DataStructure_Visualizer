@@ -4,8 +4,8 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   font-weight: 400;
-  color: #e8eef8;
-  background: #09111f;
+  color: #1b2a3d;
+  background: #f3f7fb;
 }
 
 * {
@@ -37,4 +37,9 @@ input:focus-visible {
 ::selection {
   background: #0e7490;
   color: #ffffff;
+}
+
+:root[data-theme="dark"] {
+  color: #e8eef8;
+  background: #09111f;
 }

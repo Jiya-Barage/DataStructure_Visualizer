@@ -40,11 +40,11 @@ A from-scratch C++ toolkit for implementing, testing, and experimentally compari
 * Binary Search Tree (BST)
 * AVL Tree
 
-### Planned / In Progress
+### Also Implemented
 
-* Heap
-* Hash Table
-* Graph representations
+* Binary Heap (min / max)
+* Hash Table (separate chaining)
+* Graph (adjacency list) with BFS, DFS, Dijkstra shortest paths and cycle detection
 
 ---
 
@@ -210,8 +210,26 @@ DS CP/
 From the project root:
 
 ```bash
-g++ src/main.cpp src/algorithms/Sorting.cpp -o main
+g++ -std=c++17 src/main.cpp src/*/*.cpp -o main
 ```
+
+Run the unit checks for Heap / Hash Table / Graph:
+
+```bash
+g++ -std=c++17 tests/test_new_structures.cpp src/structures/Heap.cpp src/structures/HashTable.cpp src/algorithms/Graph.cpp -o tests/test_new
+./tests/test_new
+```
+
+### Web visualizer (React + Vite)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+The web app opens in **light mode by default**; the toggle in the top bar switches to dark and your choice is remembered.
+Pages: Stack, Queue, Sorting, Searching, Linked List, Binary Search Tree (with animated traversals) and an Experiment Lab that compares all six sorting algorithms on five dataset types.
 
 Run:
 
@@ -248,16 +266,16 @@ Individual modules can also be compiled and tested independently during developm
 * [x] Quick Sort
 * [x] Heap Sort
 
-### In Progress
+### Also Completed
 
-* [ ] Performance Metrics Engine
-* [ ] Experimental Comparison Module
-* [ ] Dataset Generation
-* [ ] Graph Algorithms
-* [ ] Heap Data Structure
-* [ ] Hash Table
-* [ ] Visualization Module
-* [ ] Prediction / Interactive Learning Mode
+* [x] Performance Metrics Engine
+* [x] Experimental Comparison Module
+* [x] Dataset Generation
+* [x] Graph Algorithms
+* [x] Heap Data Structure
+* [x] Hash Table
+* [x] Visualization Module
+* [x] Prediction / Interactive Learning Mode
 
 ---
 
