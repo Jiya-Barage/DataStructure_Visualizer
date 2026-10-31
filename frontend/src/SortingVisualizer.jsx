@@ -6,6 +6,8 @@ import {
   useRef,
   useState,
 } from "react";
+import { plainSorters } from "./algorithms";
+import { formatTime, measureNet } from "./timing";
 import "./SortingVisualizer.css";
 
 const STARTING_ARRAY = [64, 34, 25, 12, 22, 11, 90];
@@ -564,6 +566,13 @@ function SortingVisualizer() {
   const isComplete = safeFrameIndex === frames.length - 1;
   const info = ALGORITHM_INFO[algorithm];
 
+  // Real run time of this algorithm on the current array (no animation involved).
+  const runtime = useMemo(() => {
+    const values = originalItems.map((item) => item.value);
+    const sorter = plainSorters[algorithm];
+    return measureNet(() => sorter(values.slice()), () => values.slice(), 8);
+  }, [originalItems, algorithm]);
+
   // Animate each card from its previous position to its new position.
   useLayoutEffect(() => {
     const currentPositions = new Map();
@@ -794,6 +803,12 @@ function SortingVisualizer() {
         <div className="sv-stat">
           <span>Array size</span>
           <strong>{originalItems.length}</strong>
+        </div>
+
+        <div className="sv-stat">
+          <span>Actual run time</span>
+          <strong>{formatTime(runtime.ns)}</strong>
+          <small>average of {runtime.runs.toLocaleString()} runs</small>
         </div>
 
         <div className="sv-stat">

@@ -1,5 +1,7 @@
 
 import { useState } from "react";
+import { linearSearch, binarySearch } from "./algorithms";
+import { formatTime, measure } from "./timing";
 import "./SearchingVisualizer.css";
 
 const SAMPLE_ARRAY = [4, 9, 13, 18, 24, 31, 42];
@@ -74,6 +76,7 @@ function SearchingVisualizer() {
   const [targetInput, setTargetInput] = useState("24");
   const [steps, setSteps] = useState([]);
   const [stepIndex, setStepIndex] = useState(-1);
+  const [timing, setTiming] = useState(null);
 
   const currentStep = steps[stepIndex];
 
@@ -91,11 +94,14 @@ function SearchingVisualizer() {
     const newSteps = createSteps(SAMPLE_ARRAY, target, mode);
     setSteps(newSteps);
     setStepIndex(0);
+    const run = mode === "Linear Search" ? linearSearch : binarySearch;
+    setTiming(measure(() => run(SAMPLE_ARRAY, target), 6));
   }
 
   function resetSearch() {
     setSteps([]);
     setStepIndex(-1);
+    setTiming(null);
   }
 
   function nextStep() {
@@ -120,6 +126,10 @@ function SearchingVisualizer() {
         <div className="search-stat">
           <span>ARRAY SIZE</span>
           <strong>{SAMPLE_ARRAY.length}</strong>
+        </div>
+        <div className="search-stat">
+          <span>ACTUAL TIME</span>
+          <strong>{timing ? formatTime(timing.ns) : "—"}</strong>
         </div>
         <div className="search-stat">
           <span>COMPARISONS</span>
@@ -244,7 +254,47 @@ function SearchingVisualizer() {
           </p>
         )}
       </section>
+      <SearchBenchmark />
     </div>
+  );
+}
+
+function SearchBenchmark() {
+  const [size, setSize] = useState(100000);
+  const [out, setOut] = useState(null);
+
+  function run() {
+    const arr = Array.from({ length: size }, (_, i) => i * 2);
+    const worst = arr[arr.length - 1]; // linear search must scan everything
+    const lin = measure(() => linearSearch(arr, worst), 15);
+    const bin = measure(() => binarySearch(arr, worst), 15);
+    setOut({ size, lin, bin });
+  }
+
+  return (
+    <section className="search-explanation">
+      <h3>Benchmark on a large array</h3>
+      <p>
+        The tiny array above finishes in nanoseconds for both algorithms. Pick a bigger array to see
+        the real gap between O(n) and O(log n) on your own machine.
+      </p>
+      <div className="search-controls" style={{ marginTop: 12 }}>
+        <label htmlFor="bench-size">Array size</label>
+        <select id="bench-size" value={size} onChange={(e) => setSize(Number(e.target.value))}>
+          {[1000, 100000, 1000000].map((n) => (
+            <option key={n} value={n}>{n.toLocaleString()} items</option>
+          ))}
+        </select>
+        <button className="search-primary" onClick={run}>Run benchmark</button>
+      </div>
+      {out && (
+        <div className="search-stats" style={{ marginTop: 14 }}>
+          <div className="search-stat"><span>LINEAR SEARCH (WORST CASE)</span><strong>{formatTime(out.lin.ns)}</strong></div>
+          <div className="search-stat"><span>BINARY SEARCH</span><strong>{formatTime(out.bin.ns)}</strong></div>
+          <div className="search-stat"><span>BINARY IS FASTER BY</span><strong>{Math.round(out.lin.ns / Math.max(out.bin.ns, 0.1)).toLocaleString()}×</strong></div>
+        </div>
+      )}
+    </section>
   );
 }
 

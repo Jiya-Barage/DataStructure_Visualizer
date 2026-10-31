@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { plainSorters } from "./algorithms";
+import { formatTime, measureNet } from "./timing";
 import "./Extras.css";
 
 /* Each sorter works on a copy and returns { comparisons, writes }. */
@@ -132,11 +134,11 @@ export default function ExperimentLab() {
     const base = datasets[dataset](size);
     const rows = Object.entries(sorters).map(([name, sorter]) => {
       const copy = [...base];
-      const t0 = performance.now();
       const { c, w } = sorter(copy);
-      const ms = performance.now() - t0;
       const ok = copy.every((v, i) => i === 0 || copy[i - 1] <= v);
-      return { name, c, w, ms, ok };
+      const plain = plainSorters[name];
+      const t = measureNet(() => plain(base.slice()), () => base.slice(), 12);
+      return { name, c, w, ns: t.ns, runs: t.runs, ok };
     });
     setResults(rows);
     setRan(`${dataset}, n = ${size}`);
@@ -163,11 +165,11 @@ export default function ExperimentLab() {
 
         {results.length > 0 && (
           <>
-            <p className="x-sub" style={{ marginTop: 16 }}>Results for {ran}. Lowest comparison count is highlighted.</p>
+            <p className="x-sub" style={{ marginTop: 16 }}>Results for {ran}. Times are averages over repeated runs. The lowest comparison count is highlighted.</p>
             <div className="lab-scroll">
               <table className="lab-table">
                 <thead>
-                  <tr><th>Algorithm</th><th>Comparisons</th><th>Writes</th><th>Time (ms)</th><th>Sorted?</th><th style={{ width: "22%" }}>Comparisons (relative)</th></tr>
+                  <tr><th>Algorithm</th><th>Comparisons</th><th>Writes</th><th>Actual time</th><th>Sorted?</th><th style={{ width: "22%" }}>Comparisons (relative)</th></tr>
                 </thead>
                 <tbody>
                   {results.map((r) => (
@@ -175,7 +177,7 @@ export default function ExperimentLab() {
                       <td>{r.name}</td>
                       <td>{r.c.toLocaleString()}</td>
                       <td>{r.w.toLocaleString()}</td>
-                      <td>{r.ms.toFixed(2)}</td>
+                      <td>{formatTime(r.ns)}</td>
                       <td>{r.ok ? "✓" : "✗"}</td>
                       <td><div className="lab-bar" style={{ width: `${(r.c / maxC) * 100}%` }} /></td>
                     </tr>

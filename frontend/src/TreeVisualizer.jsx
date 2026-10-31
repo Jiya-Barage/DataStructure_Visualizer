@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { formatTime, measure } from "./timing";
 import "./Extras.css";
 
 const make = (key) => ({ key, left: null, right: null });
@@ -90,12 +91,17 @@ export default function TreeVisualizer() {
   const [lit, setLit] = useState([]);
   const [message, setMessage] = useState("Insert values to grow the tree.");
   const [visited, setVisited] = useState([]);
+  const [lastOp, setLastOp] = useState(null);
   const timer = useRef(null);
 
   useEffect(() => () => clearInterval(timer.current), []);
 
   const num = Number(value);
   const valid = value.trim() !== "" && Number.isSafeInteger(num);
+
+  function record(name, fn) {
+    setLastOp({ name, ns: measure(fn, 5).ns });
+  }
 
   function animate(sequence, label) {
     clearInterval(timer.current);
@@ -117,6 +123,7 @@ export default function TreeVisualizer() {
   function doInsert() {
     if (!valid) return setMessage("Enter a valid integer.");
     if (has(root, num)) return setMessage(`${num} is already in the tree (BST keys are unique).`);
+    record("Insert", () => insert(root, num));
     setRoot(insert(root, num));
     setLit([num]);
     setMessage(`Inserted ${num}.`);
@@ -126,6 +133,7 @@ export default function TreeVisualizer() {
   function doDelete() {
     if (!valid) return setMessage("Enter a valid integer.");
     if (!has(root, num)) return setMessage(`${num} is not in the tree.`);
+    record("Delete", () => remove(root, num));
     setRoot(remove(root, num));
     setLit([]);
     setMessage(`Deleted ${num}.`);
@@ -134,6 +142,7 @@ export default function TreeVisualizer() {
 
   function doSearch() {
     if (!valid) return setMessage("Enter a valid integer.");
+    record("Search", () => searchPath(root, num));
     const path = searchPath(root, num);
     const found = path[path.length - 1] === num;
     animate(path, found ? `Found ${num} via path` : `${num} not found; path taken`);
@@ -150,6 +159,13 @@ export default function TreeVisualizer() {
 
   return (
     <div className="x-page">
+      <section className="x-stats">
+        <div className="x-stat"><span>Nodes</span><strong>{nodes.length}</strong></div>
+        <div className="x-stat"><span>Height</span><strong>{h}</strong></div>
+        <div className="x-stat"><span>Last operation</span><strong>{lastOp ? lastOp.name : "—"}</strong></div>
+        <div className="x-stat"><span>Actual time</span><strong>{lastOp ? formatTime(lastOp.ns) : "—"}</strong>{lastOp && <small>measured average</small>}</div>
+      </section>
+
       <section className="x-card">
         <h3>Binary Search Tree</h3>
         <p className="x-sub">Smaller keys go left, larger keys go right.</p>
@@ -189,7 +205,7 @@ export default function TreeVisualizer() {
 
         <div className="x-row">
           {Object.entries(traversals).map(([name, fn]) => (
-            <button key={name} className="x-btn" onClick={() => animate(fn(root), name)}>{name}</button>
+            <button key={name} className="x-btn" onClick={() => { record(`${name} traversal`, () => fn(root)); animate(fn(root), name); }}>{name}</button>
           ))}
         </div>
 

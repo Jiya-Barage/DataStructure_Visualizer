@@ -229,7 +229,7 @@ npm run dev
 ```
 
 The web app opens in **light mode by default**; the toggle in the top bar switches to dark and your choice is remembered.
-Pages: Stack, Queue, Sorting, Searching, Linked List, Binary Search Tree (with animated traversals) and an Experiment Lab that compares all six sorting algorithms on five dataset types.
+Pages: Dashboard, Stack, Queue, Sorting, Searching, Linked List, Binary Search Tree, Graphs (BFS / DFS / Dijkstra with adjustable size), Experiment Lab and a Quiz & Test section (Easy / Medium / Hard, practice or timed). Every visualizer shows the real measured run time in ns, µs or ms.
 
 Run:
 
